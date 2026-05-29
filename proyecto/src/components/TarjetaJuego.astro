@@ -1,0 +1,206 @@
+---
+interface Props {
+  titulo: string;
+  genero: string;
+  plataforma: string;
+  anio: number;
+  puntuacion: number;
+  estado: 'jugado' | 'pendiente' | 'jugando';
+  imagen?: string;
+}
+
+const { titulo, genero, plataforma, anio, puntuacion, estado, imagen } = Astro.props;
+
+const coloresEstado = {
+  jugado: '#39ff14',
+  jugando: '#00cfff',
+  pendiente: '#ff6b35',
+};
+
+const etiquetasEstado = {
+  jugado: 'Terminado',
+  jugando: 'Jugando',
+  pendiente: 'Pendiente',
+};
+---
+
+<article class="tarjeta-juego">
+  <div class="fondo-tarjeta" style={imagen ? `background-image: url(${imagen})` : ''}></div>
+  <div class="degradado-tarjeta"></div>
+
+  <div class="cabecera-tarjeta">
+    <span class="etiqueta-estado" style={`color: ${coloresEstado[estado]}; border-color: ${coloresEstado[estado]}33`}>
+      {etiquetasEstado[estado]}
+    </span>
+    <span class="puntuacion-tarjeta">★ {puntuacion}/10</span>
+  </div>
+
+  <div class="cuerpo-tarjeta">
+    <p class="genero-tarjeta">{genero}</p>
+    <h3 class="titulo-tarjeta">{titulo}</h3>
+    <div class="meta-tarjeta">
+      <span class="chip-meta">{plataforma}</span>
+      <span class="chip-meta">{anio}</span>
+    </div>
+  </div>
+
+  <div class="acciones-tarjeta">
+    <button class="btn-accion btn-editar">Editar</button>
+    <button class="btn-accion btn-borrar">✕</button>
+  </div>
+</article>
+
+<style>
+  .tarjeta-juego {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #0d0d0d;
+    border: 1px solid rgba(57, 255, 20, 0.12);
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  }
+
+  .tarjeta-juego:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(57, 255, 20, 0.1);
+    border-color: rgba(57, 255, 20, 0.35);
+  }
+
+  .fondo-tarjeta {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-color: #111;
+    opacity: 0.35;
+    transition: opacity 0.3s;
+  }
+
+  .tarjeta-juego:hover .fondo-tarjeta {
+    opacity: 0.5;
+  }
+
+  .degradado-tarjeta {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(5, 5, 5, 0.98) 40%, transparent 100%);
+  }
+
+  .cabecera-tarjeta {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .etiqueta-estado {
+    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: 1px solid;
+    border-radius: 3px;
+    padding: 2px 8px;
+  }
+
+  .puntuacion-tarjeta {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    color: #ffd700;
+    letter-spacing: 1px;
+  }
+
+  .cuerpo-tarjeta {
+    position: relative;
+    z-index: 2;
+  }
+
+  .genero-tarjeta {
+    font-size: 0.7rem;
+    color: #555;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+    margin: 0 0 0.3rem;
+  }
+
+  .titulo-tarjeta {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: 1.5px;
+    margin: 0 0 0.6rem;
+    line-height: 1.1;
+  }
+
+  .meta-tarjeta {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .chip-meta {
+    font-size: 0.65rem;
+    color: #666;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    padding: 2px 7px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  .acciones-tarjeta {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: all 0.25s;
+  }
+
+  .tarjeta-juego:hover .acciones-tarjeta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .btn-accion {
+    border: none;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1.5px;
+    font-size: 0.9rem;
+    border-radius: 3px;
+    transition: all 0.2s;
+  }
+
+  .btn-editar {
+    background: rgba(57, 255, 20, 0.15);
+    color: #39ff14;
+    padding: 0.35rem 1rem;
+    border: 1px solid rgba(57, 255, 20, 0.3);
+    flex: 1;
+  }
+
+  .btn-editar:hover {
+    background: rgba(57, 255, 20, 0.3);
+  }
+
+  .btn-borrar {
+    background: rgba(255, 50, 50, 0.1);
+    color: #ff4444;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid rgba(255, 50, 50, 0.2);
+  }
+
+  .btn-borrar:hover {
+    background: rgba(255, 50, 50, 0.25);
+  }
+</style>
