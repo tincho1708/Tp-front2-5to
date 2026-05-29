@@ -1,0 +1,152 @@
+---
+---
+
+<footer class="pie-pagina">
+  <div class="contenido-pie">
+    <div class="columna-pie columna-marca">
+      <a href="/" class="logo-pie">
+        <span>⚡</span> GRID<span class="verde">VAULT</span>
+      </a>
+      <p class="slogan-pie">Tu garage. Tu colección.<br />Sin filtros.</p>
+    </div>
+
+    <div class="columna-pie">
+      <h4 class="titulo-columna">Explorar</h4>
+      <ul class="links-pie">
+        <li><a href="/autos">Autos</a></li>
+        <li><a href="/coleccion">Mi Colección</a></li>
+      </ul>
+    </div>
+
+    <div class="columna-pie">
+      <h4 class="titulo-columna">Cuenta</h4>
+      <ul class="links-pie">
+        <li><a href="/registro">Registrarse</a></li>
+        <li><a href="/login">Iniciar sesión</a></li>
+        <li><a href="/perfil">Perfil</a></li>
+      </ul>
+    </div>
+
+    <div class="columna-pie">
+      <h4 class="titulo-columna">Stack</h4>
+      <ul class="links-pie tecnos">
+        <li>Astro</li>
+        <li>Supabase</li>
+        <li>Vercel</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="base-pie">
+    <p class="copyright-pie">© 2025 GridVault — hecho con ☕ y demasiado tiempo libre</p>
+    <a href="#" class="red-link">GitHub</a>
+  </div>
+</footer>
+
+<style>
+  .pie-pagina {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 4rem 8vw 2rem;
+    background: #030303;
+  }
+
+  .contenido-pie {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .logo-pie {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 0.8rem;
+  }
+
+  .verde { color: #39ff14; }
+
+  .slogan-pie {
+    color: #444;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .titulo-columna {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    color: #39ff14;
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+  }
+
+  .links-pie {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .links-pie a {
+    text-decoration: none;
+    color: #555;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+
+  .links-pie a:hover { color: #fff; }
+
+  .links-pie.tecnos li {
+    color: #333;
+    font-size: 0.8rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .base-pie {
+    max-width: 1280px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .copyright-pie {
+    color: #333;
+    font-size: 0.75rem;
+    margin: 0;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .red-link {
+    text-decoration: none;
+    color: #333;
+    font-size: 0.75rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+
+  .red-link:hover { color: #39ff14; }
+
+  @media (max-width: 768px) {
+    .contenido-pie { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .columna-marca { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 480px) {
+    .contenido-pie { grid-template-columns: 1fr; }
+  }
+</style>
