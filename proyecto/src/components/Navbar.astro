@@ -9,10 +9,9 @@
     </a>
 
     <ul class="menu-links">
-      <li><a href="/" class="link-nav" data-seccion="inicio">Inicio</a></li>
-      <li><a href="/videojuegos" class="link-nav" data-seccion="juegos">Videojuegos</a></li>
-      <li><a href="/autos" class="link-nav" data-seccion="autos">Autos</a></li>
-      <li><a href="/coleccion" class="link-nav" data-seccion="coleccion">Mi Colección</a></li>
+      <li><a href="/" class="link-nav">Inicio</a></li>
+      <li><a href="/autos" class="link-nav">Autos</a></li>
+      <li><a href="/coleccion" class="link-nav">Mi Colección</a></li>
     </ul>
 
     <div class="acciones-nav">
@@ -26,7 +25,6 @@
   <div class="menu-movil" id="menu-movil">
     <ul class="links-movil">
       <li><a href="/">Inicio</a></li>
-      <li><a href="/videojuegos">Videojuegos</a></li>
       <li><a href="/autos">Autos</a></li>
       <li><a href="/coleccion">Mi Colección</a></li>
       <li><a href="/login">Entrar</a></li>
@@ -67,13 +65,8 @@
     color: #fff;
   }
 
-  .logo-icono {
-    font-size: 1.4rem;
-  }
-
-  .logo-acento {
-    color: #39ff14;
-  }
+  .logo-icono { font-size: 1.4rem; }
+  .logo-acento { color: #39ff14; }
 
   .menu-links {
     display: flex;
@@ -104,13 +97,8 @@
     transition: width 0.25s;
   }
 
-  .link-nav:hover {
-    color: #39ff14;
-  }
-
-  .link-nav:hover::after {
-    width: 100%;
-  }
+  .link-nav:hover { color: #39ff14; }
+  .link-nav:hover::after { width: 100%; }
 
   .acciones-nav {
     display: flex;
@@ -176,13 +164,8 @@
     letter-spacing: 2px;
   }
 
-  .links-movil a:hover {
-    color: #39ff14;
-  }
-
-  .menu-movil.abierto {
-    display: block;
-  }
+  .links-movil a:hover { color: #39ff14; }
+  .menu-movil.abierto { display: block; }
 
   @media (max-width: 768px) {
     .menu-links { display: none; }

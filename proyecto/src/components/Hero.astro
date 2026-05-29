@@ -6,13 +6,13 @@
   <div class="lineas-fondo"></div>
 
   <div class="contenido-hero">
-    <p class="etiqueta-hero">// tu colección, tu mundo</p>
+    <p class="etiqueta-hero">// tu garage, tu identidad</p>
     <h1 class="titulo-hero">
-      COLECCIONÁ<br />
-      <span class="titulo-verde">LO QUE AMÁS</span>
+      REGISTRÁ<br />
+      <span class="titulo-verde">TU GARAGE</span>
     </h1>
     <p class="subtitulo-hero">
-      Registrá tus autos y videojuegos favoritos en un solo lugar.<br />
+      Organizá tu colección de autos en un solo lugar.<br />
       Simple. Rápido. Tuyo.
     </p>
     <div class="botones-hero">
@@ -22,12 +22,7 @@
 
     <div class="stats-hero">
       <div class="stat-item">
-        <span class="stat-numero">2.4K</span>
-        <span class="stat-label">Juegos cargados</span>
-      </div>
-      <div class="divisor-stat"></div>
-      <div class="stat-item">
-        <span class="stat-numero">890</span>
+        <span class="stat-numero">1.2K</span>
         <span class="stat-label">Autos registrados</span>
       </div>
       <div class="divisor-stat"></div>
@@ -35,36 +30,42 @@
         <span class="stat-numero">340+</span>
         <span class="stat-label">Usuarios activos</span>
       </div>
+      <div class="divisor-stat"></div>
+      <div class="stat-item">
+        <span class="stat-numero">80+</span>
+        <span class="stat-label">Marcas cargadas</span>
+      </div>
     </div>
   </div>
 
   <div class="imagen-hero">
-    <div class="tarjeta-flotante tarjeta-juego">
-      <div class="tarjeta-tag">🎮 PS5</div>
-      <div class="tarjeta-nombre">Elden Ring</div>
-      <div class="tarjeta-puntuacion">
-        <span class="estrella">★</span> 9.8
-      </div>
-    </div>
     <div class="orbe-fondo"></div>
-    <div class="tarjeta-flotante tarjeta-auto">
+    <div class="tarjeta-flotante tarjeta-uno">
       <div class="tarjeta-tag">🚗 JDM</div>
       <div class="tarjeta-nombre">Nissan Skyline R34</div>
-      <div class="tarjeta-puntuacion">
-        <span class="estrella roja">❤</span> Favorito
-      </div>
+      <div class="tarjeta-extra">RB26DETT · 1999 · ❤ Favorito</div>
+    </div>
+    <div class="tarjeta-flotante tarjeta-dos">
+      <div class="tarjeta-tag">🏁 Rally</div>
+      <div class="tarjeta-nombre">Subaru Impreza WRX STI</div>
+      <div class="tarjeta-extra">EJ207 · 2004</div>
+    </div>
+    <div class="tarjeta-flotante tarjeta-tres">
+      <div class="tarjeta-tag">🔥 Muscle</div>
+      <div class="tarjeta-nombre">Ford Mustang GT500</div>
+      <div class="tarjeta-extra">427 V8 · 1967</div>
     </div>
   </div>
 </section>
 
 <style>
   .seccion-hero {
-    min-height: 100vh;
+    min-height: calc(100vh - 64px);
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
     gap: 4rem;
-    padding: 7rem 8vw 5rem;
+    padding: 3rem 8vw 5rem;
     position: relative;
     overflow: hidden;
   }
@@ -163,9 +164,7 @@
     transition: color 0.2s;
   }
 
-  .boton-secundario:hover {
-    color: #fff;
-  }
+  .boton-secundario:hover { color: #fff; }
 
   .stats-hero {
     display: flex;
@@ -205,7 +204,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 1rem;
     min-height: 340px;
     animation: aparecer-der 0.9s 0.2s ease both;
     z-index: 2;
@@ -215,7 +214,7 @@
     position: absolute;
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, rgba(57, 255, 20, 0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(57, 255, 20, 0.1) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -224,31 +223,36 @@
     background: rgba(15, 15, 15, 0.9);
     border: 1px solid rgba(57, 255, 20, 0.2);
     border-radius: 10px;
-    padding: 1.2rem 1.5rem;
-    width: 240px;
+    padding: 1rem 1.4rem;
+    width: 260px;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.35rem;
     backdrop-filter: blur(10px);
     box-shadow: 0 8px 40px rgba(0,0,0,0.5);
     position: relative;
     z-index: 2;
   }
 
-  .tarjeta-juego {
+  .tarjeta-uno {
     align-self: flex-start;
-    animation: flotar 3s ease-in-out infinite;
-    transform: translateX(20px);
+    animation: flotar 3.2s ease-in-out infinite;
+    transform: translateX(10px);
   }
 
-  .tarjeta-auto {
+  .tarjeta-dos {
+    align-self: center;
+    animation: flotar 3.2s 1s ease-in-out infinite;
+  }
+
+  .tarjeta-tres {
     align-self: flex-end;
-    animation: flotar 3s 1.5s ease-in-out infinite;
-    transform: translateX(-20px);
+    animation: flotar 3.2s 2s ease-in-out infinite;
+    transform: translateX(-10px);
   }
 
   .tarjeta-tag {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #39ff14;
     font-family: 'Space Mono', monospace;
     letter-spacing: 1px;
@@ -256,27 +260,20 @@
 
   .tarjeta-nombre {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     color: #fff;
     letter-spacing: 1px;
   }
 
-  .tarjeta-puntuacion {
-    font-size: 0.85rem;
-    color: #aaa;
-  }
-
-  .estrella {
-    color: #ffd700;
-  }
-
-  .estrella.roja {
-    color: #ff4444;
+  .tarjeta-extra {
+    font-size: 0.65rem;
+    color: #555;
+    font-family: 'Space Mono', monospace;
   }
 
   @keyframes flotar {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); }
   }
 
   @keyframes aparecer-izq {
@@ -292,7 +289,7 @@
   @media (max-width: 900px) {
     .seccion-hero {
       grid-template-columns: 1fr;
-      padding: 6rem 6vw 4rem;
+      padding: 4rem 6vw 4rem;
       text-align: center;
     }
     .imagen-hero { display: none; }
