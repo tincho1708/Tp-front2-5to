@@ -1,23 +1,83 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+interface Props {
+  titulo: string;
+  descripcion?: string;
+}
+const { titulo, descripcion = 'GridVault - Tu colección de autos' } = Astro.props;
+---
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={descripcion} />
+    <title>{titulo} — GridVault</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+    <style is:global>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --verde: #39ff14;
+        --rojo: #ff4444;
+        --fondo: #050505;
+        --fondo-card: #0e0e0e;
+        --borde: rgba(255,255,255,0.08);
+        --texto: #fff;
+        --texto-gris: #888;
+      }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        background: var(--fondo);
+        color: var(--texto);
+        font-family: 'Space Mono', monospace;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      ::-webkit-scrollbar { width: 5px; }
+      ::-webkit-scrollbar-track { background: #050505; }
+      ::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--verde); }
+
+      ::selection { background: rgba(57,255,20,0.2); }
+
+      img { max-width: 100%; display: block; }
+
+      .pagina-wrapper {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      main { flex: 1; }
+
+      .con-nav { padding-top: 64px; }
+
+      .contenedor {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 6vw;
+      }
+
+      .titulo-pagina {
+        font-family: 'Bebas Neue', sans -serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        letter-spacing: 2px;
+        color: #fff;
+        margin: 0;
+      }
+
+      .titulo-verde { color: var(--verde); }
+    </style>
+  </head>
+  <body>
+    <div class="pagina-wrapper">
+      <slot />
+    </div>
+  </body>
+</html>
