@@ -2,17 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-
-const autos = [
-  { id: 1, marca: 'Nissan', modelo: 'Skyline R34 GT-R', anio: 1999, estilo: 'JDM', motor: 'RB26DETT', color: '#00cfff', favorito: true },
-  { id: 2, marca: 'Toyota', modelo: 'Supra MK4', anio: 1993, estilo: 'JDM', motor: '2JZ-GTE', color: '#ff6b35', favorito: false },
-  { id: 3, marca: 'Mazda', modelo: 'RX-7 FD3S', anio: 1992, estilo: 'JDM', motor: '13B Rotary', color: '#ff4444', favorito: false },
-  { id: 4, marca: 'Mitsubishi', modelo: 'Lancer Evo IX', anio: 2005, estilo: 'Rally', motor: '4G63T', color: '#39ff14', favorito: false },
-  { id: 5, marca: 'Subaru', modelo: 'Impreza WRX STI', anio: 2004, estilo: 'Rally', motor: 'EJ207', color: '#4488ff', favorito: true },
-  { id: 6, marca: 'Honda', modelo: 'Civic Type R EK9', anio: 1997, estilo: 'JDM', motor: 'B16B', color: '#fff', favorito: false },
-  { id: 7, marca: 'BMW', modelo: 'M3 E46', anio: 2001, estilo: 'Europeo', motor: 'S54B32', color: '#888', favorito: false },
-  { id: 8, marca: 'Ford', modelo: 'Mustang GT500', anio: 1967, estilo: 'Muscle', motor: '427 V8', color: '#cc3300', favorito: false },
-];
 ---
 
 <Layout titulo="Autos">
@@ -22,7 +11,7 @@ const autos = [
       <div class="contenedor">
         <div>
           <h1 class="titulo-pagina">Mi <span class="titulo-verde">Garage</span></h1>
-          <p class="subtitulo-pagina">{autos.length} autos registrados</p>
+          <p class="subtitulo-pagina" id="contador-autos">Cargando...</p>
         </div>
         <button class="boton-agregar" id="btn-abrir-modal">+ Agregar auto</button>
       </div>
@@ -48,74 +37,42 @@ const autos = [
 
     <section class="seccion-grilla">
       <div class="contenedor">
-        <div class="grilla-autos" id="grilla-autos">
-          {autos.map(auto => (
-            <article class="card-auto" data-estilo={auto.estilo} data-nombre={(auto.marca + ' ' + auto.modelo).toLowerCase()}>
-              <div class="barra-top" style={`background: ${auto.color}`}></div>
-              <div class="card-contenido">
-                <div class="card-cabecera">
-                  <div class="badges-auto">
-                    <span class="badge-estilo">{auto.estilo}</span>
-                    {auto.favorito && <span class="badge-fav">❤ FAV</span>}
-                  </div>
-                  <button class="btn-menu-card">···</button>
-                </div>
-                <div class="card-nombre">
-                  <p class="card-marca">{auto.marca}</p>
-                  <h3 class="card-modelo">{auto.modelo}</h3>
-                </div>
-                <div class="card-specs">
-                  <div class="spec-fila">
-                    <span class="spec-key">Año</span>
-                    <span class="spec-val">{auto.anio}</span>
-                  </div>
-                  <div class="spec-fila">
-                    <span class="spec-key">Motor</span>
-                    <span class="spec-val">{auto.motor}</span>
-                  </div>
-                  <div class="spec-fila">
-                    <span class="spec-key">Color</span>
-                    <span class="muestra-color" style={`background: ${auto.color}`}></span>
-                  </div>
-                </div>
-                <div class="card-acciones">
-                  <button class="btn-ver">Ver detalle</button>
-                  <button class="btn-fav">{auto.favorito ? '❤' : '♡'}</button>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+        <div class="grilla-autos" id="grilla-autos"></div>
         <p class="sin-resultados oculto" id="sin-resultados">No se encontraron autos.</p>
+        <p class="sin-sesion oculto" id="sin-sesion">
+          <a href="/login">Iniciá sesión</a> para ver tu colección.
+        </p>
       </div>
     </section>
   </main>
 
+  <!-- Modal agregar/editar -->
   <div class="overlay-modal oculto" id="overlay-modal">
     <div class="modal">
       <div class="modal-cabecera">
-        <h2 class="modal-titulo">Agregar Auto</h2>
+        <h2 class="modal-titulo" id="modal-titulo">Agregar Auto</h2>
         <button class="modal-cerrar" id="btn-cerrar-modal">✕</button>
       </div>
       <div class="modal-cuerpo">
+        <input type="hidden" id="edit-id" />
         <div class="fila-campos">
           <div class="campo-form">
             <label class="etiqueta-campo">Marca</label>
-            <input type="text" class="input-form" placeholder="ej. Nissan" />
+            <input type="text" class="input-form" id="input-marca" placeholder="ej. Nissan" />
           </div>
           <div class="campo-form">
             <label class="etiqueta-campo">Modelo</label>
-            <input type="text" class="input-form" placeholder="ej. Skyline R34" />
+            <input type="text" class="input-form" id="input-modelo" placeholder="ej. Skyline R34" />
           </div>
         </div>
         <div class="fila-campos">
           <div class="campo-form">
             <label class="etiqueta-campo">Año</label>
-            <input type="number" class="input-form" placeholder="1999" />
+            <input type="number" class="input-form" id="input-anio" placeholder="1999" />
           </div>
           <div class="campo-form">
             <label class="etiqueta-campo">Estilo</label>
-            <select class="input-form select-form">
+            <select class="input-form select-form" id="input-estilo">
               <option value="">Seleccionar</option>
               <option>JDM</option>
               <option>Rally</option>
@@ -128,17 +85,18 @@ const autos = [
         <div class="fila-campos">
           <div class="campo-form">
             <label class="etiqueta-campo">Motor</label>
-            <input type="text" class="input-form" placeholder="ej. RB26DETT" />
+            <input type="text" class="input-form" id="input-motor" placeholder="ej. RB26DETT" />
           </div>
           <div class="campo-form">
             <label class="etiqueta-campo">Color</label>
-            <input type="color" class="input-form input-color" value="#39ff14" />
+            <input type="color" class="input-form input-color" id="input-color" value="#39ff14" />
           </div>
         </div>
+        <div id="error-modal" class="mensaje-error oculto"></div>
       </div>
       <div class="modal-footer">
         <button class="btn-cancelar" id="btn-cancelar">Cancelar</button>
-        <button class="btn-guardar">Guardar</button>
+        <button class="btn-guardar" id="btn-guardar">Guardar</button>
       </div>
     </div>
   </div>
@@ -160,12 +118,7 @@ const autos = [
     flex-wrap: wrap;
   }
 
-  .subtitulo-pagina {
-    color: var(--texto-gris);
-    font-size: 0.75rem;
-    margin-top: 0.4rem;
-    letter-spacing: 1px;
-  }
+  .subtitulo-pagina { color: var(--texto-gris); font-size: 0.75rem; margin-top: 0.4rem; letter-spacing: 1px; }
 
   .boton-agregar {
     background: var(--verde);
@@ -182,10 +135,7 @@ const autos = [
 
   .boton-agregar:hover { opacity: 0.85; }
 
-  .seccion-filtros {
-    padding: 1.5rem 0;
-    border-bottom: 1px solid var(--borde);
-  }
+  .seccion-filtros { padding: 1.5rem 0; border-bottom: 1px solid var(--borde); }
 
   .barra-filtros {
     display: flex;
@@ -218,13 +168,7 @@ const autos = [
 
   .buscador-wrapper { position: relative; display: flex; align-items: center; }
 
-  .icono-buscar {
-    position: absolute;
-    left: 0.7rem;
-    color: var(--texto-gris);
-    font-size: 1.1rem;
-    pointer-events: none;
-  }
+  .icono-buscar { position: absolute; left: 0.7rem; color: var(--texto-gris); font-size: 1.1rem; pointer-events: none; }
 
   .input-buscar {
     background: rgba(255,255,255,0.04);
@@ -258,25 +202,13 @@ const autos = [
     transition: border-color 0.2s, transform 0.2s;
   }
 
-  .card-auto:hover {
-    border-color: rgba(255,255,255,0.15);
-    transform: translateY(-3px);
-  }
+  .card-auto:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-3px); }
 
   .barra-top { height: 3px; }
 
-  .card-contenido {
-    padding: 1.2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-  }
+  .card-contenido { padding: 1.2rem; display: flex; flex-direction: column; gap: 0.9rem; }
 
-  .card-cabecera {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  .card-cabecera { display: flex; justify-content: space-between; align-items: center; }
 
   .badges-auto { display: flex; gap: 0.4rem; align-items: center; }
 
@@ -309,19 +241,44 @@ const autos = [
     font-size: 0.9rem;
     letter-spacing: 2px;
     transition: color 0.2s;
+    position: relative;
   }
 
   .btn-menu-card:hover { color: #fff; }
 
-  .card-nombre {}
-
-  .card-marca {
-    font-size: 0.65rem;
-    color: #444;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 0.2rem;
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #1a1a1a;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    padding: 0.3rem 0;
+    z-index: 10;
+    min-width: 110px;
+    display: none;
   }
+
+  .dropdown-menu.visible { display: block; }
+
+  .dropdown-item {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.45rem 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .dropdown-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .dropdown-item.eliminar:hover { color: var(--rojo); }
+
+  .card-marca { font-size: 0.65rem; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.2rem; }
 
   .card-modelo {
     font-family: 'Bebas Neue', sans-serif;
@@ -331,39 +288,14 @@ const autos = [
     line-height: 1;
   }
 
-  .card-specs {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    border-top: 1px solid var(--borde);
-    padding-top: 0.9rem;
-  }
+  .card-specs { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--borde); padding-top: 0.9rem; }
 
-  .spec-fila {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  .spec-fila { display: flex; justify-content: space-between; align-items: center; }
 
-  .spec-key {
-    font-size: 0.65rem;
-    color: #444;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
+  .spec-key { font-size: 0.65rem; color: #444; letter-spacing: 1px; text-transform: uppercase; }
+  .spec-val { font-size: 0.75rem; color: #aaa; font-family: 'Space Mono', monospace; }
 
-  .spec-val {
-    font-size: 0.75rem;
-    color: #aaa;
-    font-family: 'Space Mono', monospace;
-  }
-
-  .muestra-color {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.1);
-  }
+  .muestra-color { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); }
 
   .card-acciones { display: flex; gap: 0.5rem; }
 
@@ -396,13 +328,9 @@ const autos = [
 
   .btn-fav:hover { background: rgba(255,68,68,0.2); }
 
-  .sin-resultados {
-    color: #444;
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 3rem 0;
-  }
-
+  .sin-resultados { color: #444; font-size: 0.85rem; text-align: center; padding: 3rem 0; }
+  .sin-sesion { color: #555; font-size: 0.85rem; text-align: center; padding: 3rem 0; }
+  .sin-sesion a { color: var(--verde); text-decoration: none; }
   .oculto { display: none !important; }
 
   .overlay-modal {
@@ -434,39 +362,17 @@ const autos = [
     border-bottom: 1px solid var(--borde);
   }
 
-  .modal-titulo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 2px;
-  }
+  .modal-titulo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; }
 
-  .modal-cerrar {
-    background: none;
-    border: none;
-    color: #555;
-    cursor: pointer;
-    transition: color 0.2s;
-  }
-
+  .modal-cerrar { background: none; border: none; color: #555; cursor: pointer; transition: color 0.2s; }
   .modal-cerrar:hover { color: #fff; }
 
-  .modal-cuerpo {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+  .modal-cuerpo { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
 
   .fila-campos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
   .campo-form { display: flex; flex-direction: column; gap: 0.4rem; }
 
-  .etiqueta-campo {
-    font-size: 0.65rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #666;
-  }
+  .etiqueta-campo { font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; color: #666; }
 
   .input-form {
     background: rgba(255,255,255,0.04);
@@ -486,6 +392,15 @@ const autos = [
   .select-form { cursor: pointer; }
   .select-form option { background: #111; }
   .input-color { padding: 0.25rem; height: 38px; cursor: pointer; }
+
+  .mensaje-error {
+    background: rgba(255,68,68,0.1);
+    border: 1px solid rgba(255,68,68,0.3);
+    color: var(--rojo);
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+  }
 
   .modal-footer {
     padding: 1rem 1.5rem;
@@ -524,26 +439,224 @@ const autos = [
   }
 
   .btn-guardar:hover { opacity: 0.85; }
+  .btn-guardar:disabled { opacity: 0.5; cursor: not-allowed; }
 </style>
 
 <script>
-  const btnAbrir = document.getElementById('btn-abrir-modal');
-  const btnCerrar = document.getElementById('btn-cerrar-modal');
-  const btnCancelar = document.getElementById('btn-cancelar');
-  const overlay = document.getElementById('overlay-modal');
+  import { supabase } from '../lib/supabase';
+  import type { Auto } from '../lib/supabase';
 
-  btnAbrir?.addEventListener('click', () => overlay?.classList.remove('oculto'));
-  btnCerrar?.addEventListener('click', () => overlay?.classList.add('oculto'));
-  btnCancelar?.addEventListener('click', () => overlay?.classList.add('oculto'));
-  overlay?.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.add('oculto'); });
+  let autosData: Auto[] = [];
 
-  const chips = document.querySelectorAll('.chip[data-filtro]');
-  const cards = document.querySelectorAll('.card-auto');
-  const sinResultados = document.getElementById('sin-resultados');
+  const grilla = document.getElementById('grilla-autos')!;
+  const contador = document.getElementById('contador-autos')!;
+  const sinResultados = document.getElementById('sin-resultados')!;
+  const sinSesion = document.getElementById('sin-sesion')!;
+  const overlay = document.getElementById('overlay-modal')!;
+  const modalTitulo = document.getElementById('modal-titulo')!;
+  const editId = document.getElementById('edit-id') as HTMLInputElement;
+  const inputMarca = document.getElementById('input-marca') as HTMLInputElement;
+  const inputModelo = document.getElementById('input-modelo') as HTMLInputElement;
+  const inputAnio = document.getElementById('input-anio') as HTMLInputElement;
+  const inputEstilo = document.getElementById('input-estilo') as HTMLSelectElement;
+  const inputMotor = document.getElementById('input-motor') as HTMLInputElement;
+  const inputColor = document.getElementById('input-color') as HTMLInputElement;
+  const errorModal = document.getElementById('error-modal')!;
+  const btnGuardar = document.getElementById('btn-guardar') as HTMLButtonElement;
+
+  function crearCardHTML(auto: Auto): string {
+    return `
+      <article class="card-auto" data-estilo="${auto.estilo}" data-nombre="${(auto.marca + ' ' + auto.modelo).toLowerCase()}" data-id="${auto.id}">
+        <div class="barra-top" style="background: ${auto.color}"></div>
+        <div class="card-contenido">
+          <div class="card-cabecera">
+            <div class="badges-auto">
+              <span class="badge-estilo">${auto.estilo || 'Otro'}</span>
+              ${auto.favorito ? '<span class="badge-fav">❤ FAV</span>' : ''}
+            </div>
+            <button class="btn-menu-card" data-id="${auto.id}">
+              ···
+              <div class="dropdown-menu" id="drop-${auto.id}">
+                <button class="dropdown-item editar" data-id="${auto.id}">✏ Editar</button>
+                <button class="dropdown-item eliminar" data-id="${auto.id}">✕ Eliminar</button>
+              </div>
+            </button>
+          </div>
+          <div class="card-nombre">
+            <p class="card-marca">${auto.marca}</p>
+            <h3 class="card-modelo">${auto.modelo}</h3>
+          </div>
+          <div class="card-specs">
+            <div class="spec-fila">
+              <span class="spec-key">Año</span>
+              <span class="spec-val">${auto.anio || '-'}</span>
+            </div>
+            <div class="spec-fila">
+              <span class="spec-key">Motor</span>
+              <span class="spec-val">${auto.motor || '-'}</span>
+            </div>
+            <div class="spec-fila">
+              <span class="spec-key">Color</span>
+              <span class="muestra-color" style="background: ${auto.color}"></span>
+            </div>
+          </div>
+          <div class="card-acciones">
+            <button class="btn-fav" data-id="${auto.id}" data-fav="${auto.favorito}">${auto.favorito ? '❤' : '♡'}</button>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function renderCards(autos: Auto[]) {
+    grilla.innerHTML = autos.map(crearCardHTML).join('');
+    contador.textContent = `${autos.length} auto${autos.length !== 1 ? 's' : ''} registrado${autos.length !== 1 ? 's' : ''}`;
+    adjuntarEventosCards();
+  }
+
+  function adjuntarEventosCards() {
+    document.querySelectorAll('.btn-menu-card').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.id!;
+        const drop = document.getElementById(`drop-${id}`);
+        document.querySelectorAll('.dropdown-menu.visible').forEach(d => {
+          if (d !== drop) d.classList.remove('visible');
+        });
+        drop?.classList.toggle('visible');
+      });
+    });
+
+    document.querySelectorAll('.dropdown-item.editar').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.id!;
+        const auto = autosData.find(a => a.id === id);
+        if (!auto) return;
+        abrirModalEditar(auto);
+      });
+    });
+
+    document.querySelectorAll('.dropdown-item.eliminar').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.id!;
+        if (!confirm('¿Eliminar este auto?')) return;
+        await supabase.from('autos').delete().eq('id', id);
+        autosData = autosData.filter(a => a.id !== id);
+        renderCards(autosData);
+        filtrar();
+      });
+    });
+
+    document.querySelectorAll('.btn-fav').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = (btn as HTMLElement).dataset.id!;
+        const esFav = (btn as HTMLElement).dataset.fav === 'true';
+        await supabase.from('autos').update({ favorito: !esFav }).eq('id', id);
+        const auto = autosData.find(a => a.id === id);
+        if (auto) auto.favorito = !esFav;
+        renderCards(autosData);
+        filtrar();
+      });
+    });
+  }
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown-menu.visible').forEach(d => d.classList.remove('visible'));
+  });
+
+  function abrirModalAgregar() {
+    editId.value = '';
+    modalTitulo.textContent = 'Agregar Auto';
+    inputMarca.value = '';
+    inputModelo.value = '';
+    inputAnio.value = '';
+    inputEstilo.value = '';
+    inputMotor.value = '';
+    inputColor.value = '#39ff14';
+    errorModal.classList.add('oculto');
+    overlay.classList.remove('oculto');
+  }
+
+  function abrirModalEditar(auto: Auto) {
+    editId.value = auto.id;
+    modalTitulo.textContent = 'Editar Auto';
+    inputMarca.value = auto.marca;
+    inputModelo.value = auto.modelo;
+    inputAnio.value = String(auto.anio || '');
+    inputEstilo.value = auto.estilo || '';
+    inputMotor.value = auto.motor || '';
+    inputColor.value = auto.color || '#39ff14';
+    errorModal.classList.add('oculto');
+    overlay.classList.remove('oculto');
+  }
+
+  function cerrarModal() { overlay.classList.add('oculto'); }
+
+  document.getElementById('btn-abrir-modal')?.addEventListener('click', abrirModalAgregar);
+  document.getElementById('btn-cerrar-modal')?.addEventListener('click', cerrarModal);
+  document.getElementById('btn-cancelar')?.addEventListener('click', cerrarModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) cerrarModal(); });
+
+  btnGuardar.addEventListener('click', async () => {
+    const marca = inputMarca.value.trim();
+    const modelo = inputModelo.value.trim();
+
+    if (!marca || !modelo) {
+      errorModal.textContent = 'Marca y modelo son obligatorios.';
+      errorModal.classList.remove('oculto');
+      return;
+    }
+
+    btnGuardar.disabled = true;
+    btnGuardar.textContent = 'Guardando...';
+    errorModal.classList.add('oculto');
+
+    const datos = {
+      marca,
+      modelo,
+      anio: inputAnio.value ? parseInt(inputAnio.value) : null,
+      estilo: inputEstilo.value || null,
+      motor: inputMotor.value.trim() || null,
+      color: inputColor.value,
+    };
+
+    const id = editId.value;
+
+    if (id) {
+      const { error } = await supabase.from('autos').update(datos).eq('id', id);
+      if (error) {
+        errorModal.textContent = 'Error al actualizar. Intentá de nuevo.';
+        errorModal.classList.remove('oculto');
+      } else {
+        const idx = autosData.findIndex(a => a.id === id);
+        if (idx !== -1) autosData[idx] = { ...autosData[idx], ...datos };
+        cerrarModal();
+        renderCards(autosData);
+        filtrar();
+      }
+    } else {
+      const { data, error } = await supabase.from('autos').insert(datos).select().single();
+      if (error) {
+        errorModal.textContent = 'Error al guardar. Iniciá sesión primero.';
+        errorModal.classList.remove('oculto');
+      } else {
+        autosData.unshift(data as Auto);
+        cerrarModal();
+        renderCards(autosData);
+        filtrar();
+      }
+    }
+
+    btnGuardar.disabled = false;
+    btnGuardar.textContent = 'Guardar';
+  });
 
   function filtrar() {
     const filtroActivo = document.querySelector('.chip.activo')?.getAttribute('data-filtro') || 'todos';
     const busqueda = (document.getElementById('buscador') as HTMLInputElement)?.value.toLowerCase() || '';
+    const cards = document.querySelectorAll('.card-auto');
     let visibles = 0;
     cards.forEach(card => {
       const estilo = card.getAttribute('data-estilo') || '';
@@ -552,16 +665,41 @@ const autos = [
       (card as HTMLElement).style.display = ok ? '' : 'none';
       if (ok) visibles++;
     });
-    sinResultados?.classList.toggle('oculto', visibles > 0);
+    sinResultados.classList.toggle('oculto', visibles > 0 || autosData.length === 0);
   }
 
-  chips.forEach(chip => {
+  document.querySelectorAll('.chip[data-filtro]').forEach(chip => {
     chip.addEventListener('click', () => {
-      chips.forEach(c => c.classList.remove('activo'));
+      document.querySelectorAll('.chip[data-filtro]').forEach(c => c.classList.remove('activo'));
       chip.classList.add('activo');
       filtrar();
     });
   });
 
   document.getElementById('buscador')?.addEventListener('input', filtrar);
+
+  async function cargarAutos() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      sinSesion.classList.remove('oculto');
+      contador.textContent = 'Sin sesión';
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('autos')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error || !data) {
+      contador.textContent = 'Error al cargar autos';
+      return;
+    }
+
+    autosData = data as Auto[];
+    renderCards(autosData);
+    filtrar();
+  }
+
+  cargarAutos();
 </script>

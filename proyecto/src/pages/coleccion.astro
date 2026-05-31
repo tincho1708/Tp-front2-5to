@@ -18,19 +18,19 @@ import Footer from '../components/Footer.astro';
       <div class="contenedor">
         <div class="grilla-stats">
           <div class="stat-card">
-            <span class="stat-numero verde">8</span>
+            <span class="stat-numero verde" id="stat-total">-</span>
             <span class="stat-label">Autos en total</span>
           </div>
           <div class="stat-card">
-            <span class="stat-numero rojo">2</span>
+            <span class="stat-numero rojo" id="stat-favs">-</span>
             <span class="stat-label">Favoritos</span>
           </div>
           <div class="stat-card">
-            <span class="stat-numero azul">3</span>
+            <span class="stat-numero azul" id="stat-jdm">-</span>
             <span class="stat-label">JDM</span>
           </div>
           <div class="stat-card">
-            <span class="stat-numero naranja">2</span>
+            <span class="stat-numero naranja" id="stat-rally">-</span>
             <span class="stat-label">Rally</span>
           </div>
         </div>
@@ -43,25 +43,8 @@ import Footer from '../components/Footer.astro';
           <h2 class="titulo-col">🚗 Últimos autos agregados</h2>
           <a href="/autos" class="link-ver-todos">Ver todos →</a>
         </div>
-        <div class="lista-recientes">
-          {[
-            { modelo: 'Skyline R34 GT-R', marca: 'Nissan', color: '#00cfff', fav: true },
-            { modelo: 'Supra MK4', marca: 'Toyota', color: '#ff6b35', fav: false },
-            { modelo: 'RX-7 FD3S', marca: 'Mazda', color: '#ff4444', fav: false },
-            { modelo: 'Impreza WRX STI', marca: 'Subaru', color: '#4488ff', fav: true },
-            { modelo: 'Lancer Evo IX', marca: 'Mitsubishi', color: '#39ff14', fav: false },
-            { modelo: 'Civic Type R EK9', marca: 'Honda', color: '#fff', fav: false },
-            { modelo: 'M3 E46', marca: 'BMW', color: '#888', fav: false },
-            { modelo: 'Mustang GT500', marca: 'Ford', color: '#cc3300', fav: false },
-          ].map(item => (
-            <div class="item-reciente">
-              <div class="item-info">
-                <span class="punto-color" style={`background: ${item.color}`}></span>
-                <span class="item-titulo">{item.modelo}</span>
-              </div>
-              <span class="item-marca">{item.marca} {item.fav ? '❤' : ''}</span>
-            </div>
-          ))}
+        <div class="lista-recientes" id="lista-recientes">
+          <p class="cargando">Cargando...</p>
         </div>
       </div>
     </section>
@@ -73,7 +56,7 @@ import Footer from '../components/Footer.astro';
             <span class="acceso-icono">🚗</span>
             <div>
               <p class="acceso-titulo">Mis Autos</p>
-              <p class="acceso-sub">8 autos en el garage</p>
+              <p class="acceso-sub" id="acceso-sub-autos">Tu garage</p>
             </div>
             <span class="acceso-flecha">→</span>
           </a>
@@ -93,25 +76,13 @@ import Footer from '../components/Footer.astro';
 </Layout>
 
 <style>
-  .cabecera-pagina {
-    padding: 3rem 0 2rem;
-    border-bottom: 1px solid var(--borde);
-  }
+  .cabecera-pagina { padding: 3rem 0 2rem; border-bottom: 1px solid var(--borde); }
 
-  .subtitulo-pagina {
-    color: var(--texto-gris);
-    font-size: 0.75rem;
-    margin-top: 0.4rem;
-    letter-spacing: 1px;
-  }
+  .subtitulo-pagina { color: var(--texto-gris); font-size: 0.75rem; margin-top: 0.4rem; letter-spacing: 1px; }
 
   .seccion-stats { padding: 2.5rem 0; border-bottom: 1px solid var(--borde); }
 
-  .grilla-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1rem;
-  }
+  .grilla-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
 
   .stat-card {
     background: var(--fondo-card);
@@ -136,12 +107,7 @@ import Footer from '../components/Footer.astro';
   .stat-numero.naranja { color: #ff6b35; }
   .stat-numero.rojo { color: var(--rojo); }
 
-  .stat-label {
-    font-size: 0.65rem;
-    color: #555;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
+  .stat-label { font-size: 0.65rem; color: #555; letter-spacing: 1px; text-transform: uppercase; }
 
   .seccion-actividad { padding: 2.5rem 0; border-bottom: 1px solid var(--borde); }
 
@@ -152,12 +118,7 @@ import Footer from '../components/Footer.astro';
     margin-bottom: 1rem;
   }
 
-  .titulo-col {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    color: #fff;
-  }
+  .titulo-col { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: #fff; }
 
   .link-ver-todos {
     font-size: 0.7rem;
@@ -181,26 +142,19 @@ import Footer from '../components/Footer.astro';
   }
 
   .item-reciente:last-child { border-bottom: none; }
-
   .item-info { display: flex; align-items: center; gap: 0.75rem; }
 
-  .punto-color {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
+  .punto-color { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .item-titulo { font-size: 0.85rem; color: #ccc; }
   .item-marca { font-size: 0.7rem; color: #555; font-family: 'Space Mono', monospace; }
 
+  .cargando { color: #555; font-size: 0.8rem; padding: 1rem 0; }
+  .sin-sesion-msg { color: #555; font-size: 0.85rem; padding: 1rem 0; }
+  .sin-sesion-msg a { color: var(--verde); text-decoration: none; }
+
   .seccion-accesos { padding: 2.5rem 0 5rem; }
 
-  .grilla-accesos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
-  }
+  .grilla-accesos { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
 
   .acceso-rapido {
     background: var(--fondo-card);
@@ -214,30 +168,64 @@ import Footer from '../components/Footer.astro';
     transition: border-color 0.2s, transform 0.2s;
   }
 
-  .acceso-rapido:hover {
-    border-color: rgba(57,255,20,0.25);
-    transform: translateY(-2px);
-  }
+  .acceso-rapido:hover { border-color: rgba(57,255,20,0.25); transform: translateY(-2px); }
 
   .acceso-icono { font-size: 1.5rem; }
 
-  .acceso-titulo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 1.5px;
-    color: #fff;
-    margin-bottom: 0.2rem;
-  }
-
+  .acceso-titulo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1.5px; color: #fff; margin-bottom: 0.2rem; }
   .acceso-sub { font-size: 0.7rem; color: #555; }
 
-  .acceso-flecha {
-    margin-left: auto;
-    color: var(--verde);
-    font-size: 1.1rem;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
+  .acceso-flecha { margin-left: auto; color: var(--verde); font-size: 1.1rem; opacity: 0; transition: opacity 0.2s; }
   .acceso-rapido:hover .acceso-flecha { opacity: 1; }
 </style>
+
+<script>
+  import { supabase } from '../lib/supabase';
+  import type { Auto } from '../lib/supabase';
+
+  async function cargarColeccion() {
+    const { data: { user } } = await supabase.auth.getUser();
+    const listaRecientes = document.getElementById('lista-recientes')!;
+
+    if (!user) {
+      listaRecientes.innerHTML = '<p class="sin-sesion-msg"><a href="/login">Iniciá sesión</a> para ver tu colección.</p>';
+      document.getElementById('stat-total')!.textContent = '0';
+      document.getElementById('stat-favs')!.textContent = '0';
+      document.getElementById('stat-jdm')!.textContent = '0';
+      document.getElementById('stat-rally')!.textContent = '0';
+      return;
+    }
+
+    const { data } = await supabase
+      .from('autos')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    const autos = (data || []) as Auto[];
+
+    document.getElementById('stat-total')!.textContent = String(autos.length);
+    document.getElementById('stat-favs')!.textContent = String(autos.filter(a => a.favorito).length);
+    document.getElementById('stat-jdm')!.textContent = String(autos.filter(a => a.estilo === 'JDM').length);
+    document.getElementById('stat-rally')!.textContent = String(autos.filter(a => a.estilo === 'Rally').length);
+
+    const sub = document.getElementById('acceso-sub-autos')!;
+    sub.textContent = `${autos.length} auto${autos.length !== 1 ? 's' : ''} en el garage`;
+
+    if (autos.length === 0) {
+      listaRecientes.innerHTML = '<p class="cargando">Tu garage está vacío. <a href="/autos" style="color:var(--verde)">Agregá tu primer auto →</a></p>';
+      return;
+    }
+
+    listaRecientes.innerHTML = autos.slice(0, 8).map(a => `
+      <div class="item-reciente">
+        <div class="item-info">
+          <span class="punto-color" style="background: ${a.color}"></span>
+          <span class="item-titulo">${a.modelo}</span>
+        </div>
+        <span class="item-marca">${a.marca} ${a.favorito ? '❤' : ''}</span>
+      </div>
+    `).join('');
+  }
+
+  cargarColeccion();
+</script>

@@ -15,7 +15,18 @@
     </ul>
 
     <div class="acciones-nav">
-      <a href="/login" class="boton-entrar">Entrar</a>
+      <!-- Estado sin sesión -->
+      <a href="/login" class="boton-entrar" id="btn-entrar">Entrar</a>
+
+      <!-- Estado con sesión (oculto por default, se muestra con JS) -->
+      <div class="usuario-menu oculto" id="usuario-menu">
+        <a href="/perfil" class="usuario-chip" id="chip-usuario">
+          <span class="avatar-nav" id="avatar-nav">?</span>
+          <span id="nombre-nav">Perfil</span>
+        </a>
+        <button class="btn-logout" id="btn-logout" title="Cerrar sesión">⏻</button>
+      </div>
+
       <button class="boton-menu-movil" id="btn-hamburguesa" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -27,7 +38,7 @@
       <li><a href="/">Inicio</a></li>
       <li><a href="/autos">Autos</a></li>
       <li><a href="/coleccion">Mi Colección</a></li>
-      <li><a href="/login">Entrar</a></li>
+      <li id="movil-auth-link"><a href="/login">Entrar</a></li>
     </ul>
   </div>
 </nav>
@@ -100,11 +111,7 @@
   .link-nav:hover { color: #39ff14; }
   .link-nav:hover::after { width: 100%; }
 
-  .acciones-nav {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
+  .acciones-nav { display: flex; align-items: center; gap: 1rem; }
 
   .boton-entrar {
     text-decoration: none;
@@ -118,10 +125,65 @@
     transition: box-shadow 0.2s, transform 0.15s;
   }
 
-  .boton-entrar:hover {
-    box-shadow: 0 0 18px #39ff14aa;
-    transform: translateY(-1px);
+  .boton-entrar:hover { box-shadow: 0 0 18px #39ff14aa; transform: translateY(-1px); }
+
+  .usuario-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
+
+  .usuario-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    background: rgba(57,255,20,0.08);
+    border: 1px solid rgba(57,255,20,0.2);
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem 0.3rem 0.4rem;
+    transition: background 0.2s;
+  }
+
+  .usuario-chip:hover { background: rgba(57,255,20,0.15); }
+
+  .avatar-nav {
+    width: 26px;
+    height: 26px;
+    background: rgba(57,255,20,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.8rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  #nombre-nav {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    color: var(--verde);
+  }
+
+  .btn-logout {
+    background: rgba(255,68,68,0.08);
+    border: 1px solid rgba(255,68,68,0.2);
+    color: var(--rojo);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .btn-logout:hover { background: rgba(255,68,68,0.2); }
 
   .boton-menu-movil {
     display: none;
@@ -133,13 +195,7 @@
     padding: 4px;
   }
 
-  .boton-menu-movil span {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: #fff;
-    transition: all 0.3s;
-  }
+  .boton-menu-movil span { display: block; width: 24px; height: 2px; background: #fff; transition: all 0.3s; }
 
   .menu-movil {
     display: none;
@@ -167,17 +223,53 @@
   .links-movil a:hover { color: #39ff14; }
   .menu-movil.abierto { display: block; }
 
+  .oculto { display: none !important; }
+
   @media (max-width: 768px) {
     .menu-links { display: none; }
     .boton-entrar { display: none; }
+    .usuario-menu { display: none !important; }
     .boton-menu-movil { display: flex; }
   }
 </style>
 
 <script>
+  import { supabase } from '../lib/supabase';
+
+  const btnEntrar = document.getElementById('btn-entrar')!;
+  const usuarioMenu = document.getElementById('usuario-menu')!;
+  const avatarNav = document.getElementById('avatar-nav')!;
+  const nombreNav = document.getElementById('nombre-nav')!;
+  const btnLogout = document.getElementById('btn-logout')!;
+  const movilAuthLink = document.getElementById('movil-auth-link')!;
+
+  async function actualizarNavbar() {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+      btnEntrar.classList.add('oculto');
+      usuarioMenu.classList.remove('oculto');
+
+      const meta = user.user_metadata || {};
+      const nombre = meta.nombre || meta.usuario || user.email!.split('@')[0];
+      nombreNav.textContent = nombre.split(' ')[0];
+      avatarNav.textContent = nombre.slice(0, 2).toUpperCase();
+
+      movilAuthLink.innerHTML = '<button id="btn-logout-movil" style="background:none;border:none;color:#ff4444;font-family:\'Bebas Neue\',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;padding:0;">Cerrar sesión</button>';
+      document.getElementById('btn-logout-movil')?.addEventListener('click', logout);
+    }
+  }
+
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = '/';
+  }
+
+  btnLogout.addEventListener('click', logout);
+
   const btnHamburguesa = document.getElementById('btn-hamburguesa');
   const menuMovil = document.getElementById('menu-movil');
-  btnHamburguesa?.addEventListener('click', () => {
-    menuMovil?.classList.toggle('abierto');
-  });
+  btnHamburguesa?.addEventListener('click', () => menuMovil?.classList.toggle('abierto'));
+
+  actualizarNavbar();
 </script>

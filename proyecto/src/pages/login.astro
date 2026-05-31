@@ -14,6 +14,8 @@ import Navbar from '../components/Navbar.astro';
           <p class="subtitulo-auth">Ingresá a tu colección</p>
         </div>
 
+        <div id="error-msg" class="mensaje-error oculto"></div>
+
         <div class="formulario-auth">
           <div class="campo-form">
             <label class="etiqueta-campo">Email</label>
@@ -37,7 +39,6 @@ import Navbar from '../components/Navbar.astro';
           </div>
 
           <button class="boton-submit" id="btn-login">Iniciar sesión</button>
-
         </div>
 
         <p class="link-alternativo">
@@ -57,10 +58,7 @@ import Navbar from '../components/Navbar.astro';
     padding: 2rem 1rem;
   }
 
-  .contenedor-auth {
-    width: 100%;
-    max-width: 420px;
-  }
+  .contenedor-auth { width: 100%; max-width: 420px; }
 
   .card-auth {
     background: var(--fondo-card);
@@ -69,10 +67,7 @@ import Navbar from '../components/Navbar.astro';
     padding: 2.5rem;
   }
 
-  .auth-cabecera {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
+  .auth-cabecera { text-align: center; margin-bottom: 2rem; }
 
   .logo-auth {
     display: inline-block;
@@ -94,17 +89,19 @@ import Navbar from '../components/Navbar.astro';
     margin-bottom: 0.3rem;
   }
 
-  .subtitulo-auth {
-    font-size: 0.8rem;
-    color: var(--texto-gris);
-    letter-spacing: 0.5px;
+  .subtitulo-auth { font-size: 0.8rem; color: var(--texto-gris); letter-spacing: 0.5px; }
+
+  .mensaje-error {
+    background: rgba(255,68,68,0.1);
+    border: 1px solid rgba(255,68,68,0.3);
+    color: var(--rojo);
+    font-size: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
   }
 
-  .formulario-auth {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+  .formulario-auth { display: flex; flex-direction: column; gap: 1rem; }
 
   .campo-form { display: flex; flex-direction: column; gap: 0.4rem; }
 
@@ -131,13 +128,8 @@ import Navbar from '../components/Navbar.astro';
   .input-form:focus { border-color: rgba(57,255,20,0.4); }
   .input-form::placeholder { color: #333; }
 
-  .input-password-wrapper {
-    position: relative;
-  }
-
-  .input-password-wrapper .input-form {
-    padding-right: 2.5rem;
-  }
+  .input-password-wrapper { position: relative; }
+  .input-password-wrapper .input-form { padding-right: 2.5rem; }
 
   .btn-toggle-pass {
     position: absolute;
@@ -161,13 +153,7 @@ import Navbar from '../components/Navbar.astro';
     gap: 1rem;
   }
 
-  .checkbox-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-  }
-
+  .checkbox-wrapper { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
   .checkbox-real { display: none; }
 
   .checkbox-custom {
@@ -182,18 +168,8 @@ import Navbar from '../components/Navbar.astro';
     transition: all 0.15s;
   }
 
-  .checkbox-real:checked + .checkbox-custom {
-    background: var(--verde);
-    border-color: var(--verde);
-  }
-
-  .checkbox-real:checked + .checkbox-custom::after {
-    content: '✓';
-    font-size: 0.65rem;
-    color: #050505;
-    font-weight: bold;
-  }
-
+  .checkbox-real:checked + .checkbox-custom { background: var(--verde); border-color: var(--verde); }
+  .checkbox-real:checked + .checkbox-custom::after { content: '✓'; font-size: 0.65rem; color: #050505; font-weight: bold; }
   .checkbox-label { font-size: 0.7rem; color: #666; }
 
   .link-olvidaste {
@@ -222,27 +198,9 @@ import Navbar from '../components/Navbar.astro';
   }
 
   .boton-submit:hover { opacity: 0.85; }
+  .boton-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .separador {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .linea-sep {
-    flex: 1;
-    height: 1px;
-    background: var(--borde);
-  }
-
-  .texto-sep { font-size: 0.7rem; color: #444; }
-
-  .link-alternativo {
-    text-align: center;
-    font-size: 0.75rem;
-    color: #555;
-    margin-top: 1.5rem;
-  }
+  .link-alternativo { text-align: center; font-size: 0.75rem; color: #555; margin-top: 1.5rem; }
 
   .link-alternativo a {
     color: var(--verde);
@@ -252,11 +210,17 @@ import Navbar from '../components/Navbar.astro';
   }
 
   .link-alternativo a:hover { opacity: 1; }
+  .oculto { display: none !important; }
 </style>
 
 <script>
+  import { supabase } from '../lib/supabase';
+
   const btnVerPass = document.getElementById('btn-ver-pass');
   const campoPass = document.getElementById('campo-pass') as HTMLInputElement;
+  const campoEmail = document.getElementById('campo-email') as HTMLInputElement;
+  const btnLogin = document.getElementById('btn-login') as HTMLButtonElement;
+  const errorMsg = document.getElementById('error-msg')!;
 
   btnVerPass?.addEventListener('click', () => {
     if (campoPass.type === 'password') {
@@ -265,6 +229,32 @@ import Navbar from '../components/Navbar.astro';
     } else {
       campoPass.type = 'password';
       btnVerPass.textContent = '👁';
+    }
+  });
+
+  btnLogin?.addEventListener('click', async () => {
+    const email = campoEmail.value.trim();
+    const password = campoPass.value;
+
+    if (!email || !password) {
+      errorMsg.textContent = 'Completá todos los campos.';
+      errorMsg.classList.remove('oculto');
+      return;
+    }
+
+    btnLogin.disabled = true;
+    btnLogin.textContent = 'Ingresando...';
+    errorMsg.classList.add('oculto');
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      errorMsg.textContent = 'Email o contraseña incorrectos.';
+      errorMsg.classList.remove('oculto');
+      btnLogin.disabled = false;
+      btnLogin.textContent = 'Iniciar sesión';
+    } else {
+      window.location.href = '/coleccion';
     }
   });
 </script>
