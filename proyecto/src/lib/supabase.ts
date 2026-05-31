@@ -10,9 +10,9 @@ export type Auto = {
   user_id: string;
   marca: string;
   modelo: string;
-  anio: number;
-  estilo: string;
-  motor: string;
+  anio: number | null;
+  estilo: string | null;
+  motor: string | null;
   color: string;
   favorito: boolean;
   created_at: string;
