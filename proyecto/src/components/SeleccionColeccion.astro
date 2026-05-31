@@ -1,0 +1,132 @@
+---
+import TarjetaAuto from './TarjetaAuto.astro';
+
+const autosEjemplo = [
+  { marca: 'Nissan', modelo: 'Skyline R34 GT-R', anio: 1999, estilo: 'JDM', potencia: 'RB26 Twin Turbo', color: '#00cfff', favorito: true },
+  { marca: 'Toyota', modelo: 'Supra MK4', anio: 1993, estilo: 'JDM', potencia: '2JZ-GTE', color: '#ff6b35', favorito: false },
+  { marca: 'Mazda', modelo: 'RX-7 FD', anio: 1992, estilo: 'JDM', potencia: '13B Rotary', color: '#ff4444', favorito: false },
+  { marca: 'Subaru', modelo: 'Impreza WRX STI', anio: 2004, estilo: 'Rally', potencia: 'EJ207', color: '#4488ff', favorito: true },
+];
+---
+
+<section class="seccion-coleccion" id="explorar">
+  <div class="encabezado-seccion">
+    <div class="titulo-seccion-wrapper">
+      <span class="linea-acento"></span>
+      <h2 class="titulo-seccion">Tu Garage</h2>
+    </div>
+    <p class="descripcion-seccion">Los autos que más te gustan, todos en un lugar</p>
+  </div>
+
+  <div class="barra-filtros">
+    <div class="filtros-izq">
+      <button class="chip-filtro activo">Todos</button>
+      <button class="chip-filtro">JDM</button>
+      <button class="chip-filtro">Rally</button>
+      <button class="chip-filtro">Favoritos</button>
+    </div>
+    <a href="/autos" class="boton-ver-todos">Ver todos →</a>
+  </div>
+
+  <div class="grilla-autos">
+    {autosEjemplo.map(auto => (
+      <TarjetaAuto {...auto} />
+    ))}
+  </div>
+</section>
+
+<style>
+  .seccion-coleccion {
+    padding: 5rem 8vw 6rem;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .encabezado-seccion { margin-bottom: 2rem; }
+
+  .titulo-seccion-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .linea-acento {
+    display: block;
+    width: 4px;
+    height: 2rem;
+    background: #39ff14;
+    box-shadow: 0 0 12px rgba(57, 255, 20, 0.6);
+    border-radius: 2px;
+  }
+
+  .titulo-seccion {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: #fff;
+    letter-spacing: 2px;
+    margin: 0;
+  }
+
+  .descripcion-seccion {
+    color: #555;
+    font-size: 0.85rem;
+    margin: 0;
+    padding-left: 1.3rem;
+    letter-spacing: 1px;
+  }
+
+  .barra-filtros {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filtros-izq { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+  .chip-filtro {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #666;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    padding: 0.35rem 0.9rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .chip-filtro.activo,
+  .chip-filtro:hover {
+    background: rgba(57, 255, 20, 0.1);
+    border-color: rgba(57, 255, 20, 0.3);
+    color: #39ff14;
+  }
+
+  .boton-ver-todos {
+    text-decoration: none;
+    color: #39ff14;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .boton-ver-todos:hover { opacity: 1; }
+
+  .grilla-autos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+  }
+
+  @media (max-width: 600px) {
+    .seccion-coleccion { padding: 4rem 5vw; }
+    .barra-filtros { flex-direction: column; align-items: flex-start; }
+  }
+</style>
