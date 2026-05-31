@@ -1,0 +1,300 @@
+---
+---
+
+<section class="seccion-hero">
+  <div class="fondo-ruido"></div>
+  <div class="lineas-fondo"></div>
+
+  <div class="contenido-hero">
+    <p class="etiqueta-hero">// tu garage, tu identidad</p>
+    <h1 class="titulo-hero">
+      REGISTRÁ<br />
+      <span class="titulo-verde">TU GARAGE</span>
+    </h1>
+    <p class="subtitulo-hero">
+      Organizá tu colección de autos en un solo lugar.<br />
+      Simple. Rápido. Tuyo.
+    </p>
+    <div class="botones-hero">
+      <a href="/registro" class="boton-primario">Empezar gratis</a>
+      <a href="#explorar" class="boton-secundario">Ver demo →</a>
+    </div>
+
+    <div class="stats-hero">
+      <div class="stat-item">
+        <span class="stat-numero">1.2K</span>
+        <span class="stat-label">Autos registrados</span>
+      </div>
+      <div class="divisor-stat"></div>
+      <div class="stat-item">
+        <span class="stat-numero">340+</span>
+        <span class="stat-label">Usuarios activos</span>
+      </div>
+      <div class="divisor-stat"></div>
+      <div class="stat-item">
+        <span class="stat-numero">80+</span>
+        <span class="stat-label">Marcas cargadas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="imagen-hero">
+    <div class="orbe-fondo"></div>
+    <div class="tarjeta-flotante tarjeta-uno">
+      <div class="tarjeta-tag">🚗 JDM</div>
+      <div class="tarjeta-nombre">Nissan Skyline R34</div>
+      <div class="tarjeta-extra">RB26DETT · 1999 · ❤ Favorito</div>
+    </div>
+    <div class="tarjeta-flotante tarjeta-dos">
+      <div class="tarjeta-tag">🏁 Rally</div>
+      <div class="tarjeta-nombre">Subaru Impreza WRX STI</div>
+      <div class="tarjeta-extra">EJ207 · 2004</div>
+    </div>
+    <div class="tarjeta-flotante tarjeta-tres">
+      <div class="tarjeta-tag">🔥 Muscle</div>
+      <div class="tarjeta-nombre">Ford Mustang GT500</div>
+      <div class="tarjeta-extra">427 V8 · 1967</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .seccion-hero {
+    min-height: calc(100vh - 64px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 4rem;
+    padding: 3rem 8vw 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fondo-ruido {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .lineas-fondo {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      rgba(57, 255, 20, 0.03) 0px,
+      transparent 1px,
+      transparent 80px
+    );
+    pointer-events: none;
+  }
+
+  .contenido-hero {
+    position: relative;
+    z-index: 2;
+    animation: aparecer-izq 0.8s ease both;
+  }
+
+  .etiqueta-hero {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: #39ff14;
+    letter-spacing: 2px;
+    margin-bottom: 1.2rem;
+    opacity: 0.8;
+  }
+
+  .titulo-hero {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: #fff;
+    margin: 0 0 1.5rem;
+  }
+
+  .titulo-verde {
+    color: #39ff14;
+    text-shadow: 0 0 40px rgba(57, 255, 20, 0.4);
+  }
+
+  .subtitulo-hero {
+    color: #888;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    max-width: 420px;
+  }
+
+  .botones-hero {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .boton-primario {
+    text-decoration: none;
+    background: #39ff14;
+    color: #050505;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    padding: 0.8rem 2rem;
+    border-radius: 3px;
+    transition: all 0.2s;
+    box-shadow: 0 0 25px rgba(57, 255, 20, 0.3);
+  }
+
+  .boton-primario:hover {
+    box-shadow: 0 0 45px rgba(57, 255, 20, 0.6);
+    transform: translateY(-2px);
+  }
+
+  .boton-secundario {
+    text-decoration: none;
+    color: #aaa;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    transition: color 0.2s;
+  }
+
+  .boton-secundario:hover { color: #fff; }
+
+  .stats-hero {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-numero {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: #555;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .divisor-stat {
+    width: 1px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .imagen-hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 340px;
+    animation: aparecer-der 0.9s 0.2s ease both;
+    z-index: 2;
+  }
+
+  .orbe-fondo {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(57, 255, 20, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .tarjeta-flotante {
+    background: rgba(15, 15, 15, 0.9);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    border-radius: 10px;
+    padding: 1rem 1.4rem;
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    position: relative;
+    z-index: 2;
+  }
+
+  .tarjeta-uno {
+    align-self: flex-start;
+    animation: flotar 3.2s ease-in-out infinite;
+    transform: translateX(10px);
+  }
+
+  .tarjeta-dos {
+    align-self: center;
+    animation: flotar 3.2s 1s ease-in-out infinite;
+  }
+
+  .tarjeta-tres {
+    align-self: flex-end;
+    animation: flotar 3.2s 2s ease-in-out infinite;
+    transform: translateX(-10px);
+  }
+
+  .tarjeta-tag {
+    font-size: 0.7rem;
+    color: #39ff14;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  .tarjeta-nombre {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+
+  .tarjeta-extra {
+    font-size: 0.65rem;
+    color: #555;
+    font-family: 'Space Mono', monospace;
+  }
+
+  @keyframes flotar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes aparecer-izq {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes aparecer-der {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @media (max-width: 900px) {
+    .seccion-hero {
+      grid-template-columns: 1fr;
+      padding: 4rem 6vw 4rem;
+      text-align: center;
+    }
+    .imagen-hero { display: none; }
+    .subtitulo-hero { max-width: 100%; }
+    .botones-hero { justify-content: center; }
+    .stats-hero { justify-content: center; }
+  }
+</style>
