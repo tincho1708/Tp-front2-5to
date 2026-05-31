@@ -14,11 +14,14 @@ import Navbar from '../components/Navbar.astro';
           <p class="subtitulo-auth">Gratis, sin drama</p>
         </div>
 
+        <div id="error-msg" class="mensaje-error oculto"></div>
+        <div id="ok-msg" class="mensaje-ok oculto"></div>
+
         <div class="formulario-auth">
           <div class="fila-campos">
             <div class="campo-form">
               <label class="etiqueta-campo">Nombre</label>
-              <input type="text" class="input-form" placeholder="Tu nombre" />
+              <input type="text" class="input-form" placeholder="Tu nombre" id="campo-nombre" />
             </div>
             <div class="campo-form">
               <label class="etiqueta-campo">Usuario</label>
@@ -28,7 +31,7 @@ import Navbar from '../components/Navbar.astro';
 
           <div class="campo-form">
             <label class="etiqueta-campo">Email</label>
-            <input type="email" class="input-form" placeholder="vos@ejemplo.com" />
+            <input type="email" class="input-form" placeholder="vos@ejemplo.com" id="campo-email" />
           </div>
 
           <div class="campo-form">
@@ -44,17 +47,16 @@ import Navbar from '../components/Navbar.astro';
 
           <div class="campo-form">
             <label class="etiqueta-campo">Repetir contraseña</label>
-            <input type="password" class="input-form" placeholder="••••••••" />
+            <input type="password" class="input-form" placeholder="••••••••" id="campo-pass2" />
           </div>
 
           <label class="checkbox-wrapper">
-            <input type="checkbox" class="checkbox-real" />
+            <input type="checkbox" class="checkbox-real" id="terminos" />
             <span class="checkbox-custom"></span>
             <span class="checkbox-label">Acepto los <a href="#" class="link-terminos">términos y condiciones</a></span>
           </label>
 
-          <button class="boton-submit">Crear cuenta</button>
-
+          <button class="boton-submit" id="btn-registro">Crear cuenta</button>
         </div>
 
         <p class="link-alternativo">
@@ -83,10 +85,7 @@ import Navbar from '../components/Navbar.astro';
     padding: 2.5rem;
   }
 
-  .auth-cabecera {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
+  .auth-cabecera { text-align: center; margin-bottom: 2rem; }
 
   .logo-auth {
     display: inline-block;
@@ -110,10 +109,28 @@ import Navbar from '../components/Navbar.astro';
 
   .subtitulo-auth { font-size: 0.8rem; color: var(--texto-gris); }
 
+  .mensaje-error {
+    background: rgba(255,68,68,0.1);
+    border: 1px solid rgba(255,68,68,0.3);
+    color: var(--rojo);
+    font-size: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+  }
+
+  .mensaje-ok {
+    background: rgba(57,255,20,0.1);
+    border: 1px solid rgba(57,255,20,0.3);
+    color: var(--verde);
+    font-size: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+  }
+
   .formulario-auth { display: flex; flex-direction: column; gap: 1rem; }
-
   .fila-campos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
   .campo-form { display: flex; flex-direction: column; gap: 0.4rem; }
 
   .etiqueta-campo {
@@ -139,11 +156,7 @@ import Navbar from '../components/Navbar.astro';
   .input-form:focus { border-color: rgba(57,255,20,0.4); }
   .input-form::placeholder { color: #333; }
 
-  .barra-fortaleza {
-    display: flex;
-    gap: 4px;
-    margin-top: 0.4rem;
-  }
+  .barra-fortaleza { display: flex; gap: 4px; margin-top: 0.4rem; }
 
   .segmento-fortaleza {
     flex: 1;
@@ -158,13 +171,7 @@ import Navbar from '../components/Navbar.astro';
   .segmento-fortaleza.activo[data-nivel="3"] { background: #ffd700; }
   .segmento-fortaleza.activo[data-nivel="4"] { background: var(--verde); }
 
-  .checkbox-wrapper {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    cursor: pointer;
-  }
-
+  .checkbox-wrapper { display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer; }
   .checkbox-real { display: none; }
 
   .checkbox-custom {
@@ -180,20 +187,9 @@ import Navbar from '../components/Navbar.astro';
     transition: all 0.15s;
   }
 
-  .checkbox-real:checked + .checkbox-custom {
-    background: var(--verde);
-    border-color: var(--verde);
-  }
-
-  .checkbox-real:checked + .checkbox-custom::after {
-    content: '✓';
-    font-size: 0.65rem;
-    color: #050505;
-    font-weight: bold;
-  }
-
+  .checkbox-real:checked + .checkbox-custom { background: var(--verde); border-color: var(--verde); }
+  .checkbox-real:checked + .checkbox-custom::after { content: '✓'; font-size: 0.65rem; color: #050505; font-weight: bold; }
   .checkbox-label { font-size: 0.7rem; color: #666; line-height: 1.5; }
-
   .link-terminos { color: var(--verde); text-decoration: none; opacity: 0.8; }
   .link-terminos:hover { opacity: 1; }
 
@@ -213,26 +209,26 @@ import Navbar from '../components/Navbar.astro';
   }
 
   .boton-submit:hover { opacity: 0.85; }
+  .boton-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .link-alternativo {
-    text-align: center;
-    font-size: 0.75rem;
-    color: #555;
-    margin-top: 1.5rem;
-  }
-
-  .link-alternativo a {
-    color: var(--verde);
-    text-decoration: none;
-    opacity: 0.8;
-    transition: opacity 0.2s;
-  }
-
+  .link-alternativo { text-align: center; font-size: 0.75rem; color: #555; margin-top: 1.5rem; }
+  .link-alternativo a { color: var(--verde); text-decoration: none; opacity: 0.8; transition: opacity 0.2s; }
   .link-alternativo a:hover { opacity: 1; }
+  .oculto { display: none !important; }
 </style>
 
 <script>
+  import { supabase } from '../lib/supabase';
+
   const campoPass = document.getElementById('campo-pass') as HTMLInputElement;
+  const campoPass2 = document.getElementById('campo-pass2') as HTMLInputElement;
+  const campoEmail = document.getElementById('campo-email') as HTMLInputElement;
+  const campoNombre = document.getElementById('campo-nombre') as HTMLInputElement;
+  const campoUsuario = document.getElementById('campo-usuario') as HTMLInputElement;
+  const terminos = document.getElementById('terminos') as HTMLInputElement;
+  const btnRegistro = document.getElementById('btn-registro') as HTMLButtonElement;
+  const errorMsg = document.getElementById('error-msg')!;
+  const okMsg = document.getElementById('ok-msg')!;
   const segmentos = document.querySelectorAll('.segmento-fortaleza');
 
   campoPass?.addEventListener('input', () => {
@@ -242,9 +238,65 @@ import Navbar from '../components/Navbar.astro';
     if (val.length >= 8) nivel = 2;
     if (val.length >= 8 && /[A-Z]/.test(val) && /[0-9]/.test(val)) nivel = 3;
     if (val.length >= 12 && /[A-Z]/.test(val) && /[0-9]/.test(val) && /[^a-zA-Z0-9]/.test(val)) nivel = 4;
+    segmentos.forEach((seg, i) => seg.classList.toggle('activo', i < nivel));
+  });
 
-    segmentos.forEach((seg, i) => {
-      seg.classList.toggle('activo', i < nivel);
+  btnRegistro?.addEventListener('click', async () => {
+    const email = campoEmail.value.trim();
+    const password = campoPass.value;
+    const nombre = campoNombre.value.trim();
+    const usuario = campoUsuario.value.trim().replace('@', '');
+
+    errorMsg.classList.add('oculto');
+    okMsg.classList.add('oculto');
+
+    if (!nombre || !email || !password) {
+      errorMsg.textContent = 'Completá todos los campos obligatorios.';
+      errorMsg.classList.remove('oculto');
+      return;
+    }
+
+    if (password !== campoPass2.value) {
+      errorMsg.textContent = 'Las contraseñas no coinciden.';
+      errorMsg.classList.remove('oculto');
+      return;
+    }
+
+    if (password.length < 8) {
+      errorMsg.textContent = 'La contraseña debe tener al menos 8 caracteres.';
+      errorMsg.classList.remove('oculto');
+      return;
+    }
+
+    if (!terminos.checked) {
+      errorMsg.textContent = 'Tenés que aceptar los términos y condiciones.';
+      errorMsg.classList.remove('oculto');
+      return;
+    }
+
+    btnRegistro.disabled = true;
+    btnRegistro.textContent = 'Creando cuenta...';
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { nombre, usuario: usuario || nombre.toLowerCase().replace(/\s+/g, '') },
+      },
     });
+
+    if (error) {
+      errorMsg.textContent = error.message === 'User already registered'
+        ? 'Ya existe una cuenta con ese email.'
+        : 'Error al crear la cuenta. Intentá de nuevo.';
+      errorMsg.classList.remove('oculto');
+      btnRegistro.disabled = false;
+      btnRegistro.textContent = 'Crear cuenta';
+    } else {
+      okMsg.textContent = '¡Cuenta creada! Revisá tu email para confirmar.';
+      okMsg.classList.remove('oculto');
+      btnRegistro.textContent = 'Cuenta creada ✓';
+      setTimeout(() => { window.location.href = '/login'; }, 2500);
+    }
   });
 </script>
