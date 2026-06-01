@@ -613,6 +613,15 @@ import Footer from '../components/Footer.astro';
     btnGuardar.textContent = 'Guardando...';
     errorModal.classList.add('oculto');
 
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      errorModal.textContent = 'Debés iniciar sesión para guardar.';
+      errorModal.classList.remove('oculto');
+      btnGuardar.disabled = false;
+      btnGuardar.textContent = 'Guardar';
+      return;
+    }
+
     const datos = {
       marca,
       modelo,
@@ -637,9 +646,9 @@ import Footer from '../components/Footer.astro';
         filtrar();
       }
     } else {
-      const { data, error } = await supabase.from('autos').insert(datos).select().single();
+      const { data, error } = await supabase.from('autos').insert({ ...datos, user_id: user.id }).select().single();
       if (error) {
-        errorModal.textContent = 'Error al guardar. Iniciá sesión primero.';
+        errorModal.textContent = 'Error al guardar. Intentá de nuevo.';
         errorModal.classList.remove('oculto');
       } else {
         autosData.unshift(data as Auto);
