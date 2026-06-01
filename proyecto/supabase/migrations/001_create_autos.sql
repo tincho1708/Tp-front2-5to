@@ -26,3 +26,7 @@ CREATE POLICY "update_own_autos" ON public.autos
 
 CREATE POLICY "delete_own_autos" ON public.autos
   FOR DELETE USING (auth.uid() = user_id);
+
+-- Permisos de tabla por rol
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.autos TO authenticated;
+GRANT SELECT ON public.autos TO anon;
