@@ -1,12 +1,8 @@
-# GridVault
+GridVault es una app web para armar tu propia colección de autos de carrera y tuneados (JDM, Rally, Muscle, Europeos). La hicimos como Trabajo Práctico para tpfront-2. Te podés registrar, iniciar sesión y manejar tu colección con estadísticas, favoritos y un perfil editable.
 
-GridVault es una aplicación web de colección de autos de carrera y modificados (JDM, Rally, Muscle, Europeo), hecha como Trabajo Práctico tpfront-2. Permite registrarse, iniciar sesión y gestionar una colección personal de autos con estadísticas, favoritos y perfil que se puede editar.
-
-## URL de producción
 
 https://tp-front2-5to-3omu.vercel.app/
 
-## Tech Stack
 
 - **Framework:** Astro 6
 - **Backend:** Supabase (Auth + PostgreSQL)
@@ -15,9 +11,8 @@ https://tp-front2-5to-3omu.vercel.app/
 - **Testing:** Vitest (unitarios) + Playwright (E2E)
 - **CI/CD:** GitHub Actions
 
-## Convención de ramas
 
-Todas las ramas deben seguir esta convención de nombres:
+Un detalle importante: todas las ramas tienen que respetar esta convención de nombres.
 
 | Prefijo | Uso | Ejemplo |
 |---------|-----|---------|
@@ -27,33 +22,15 @@ Todas las ramas deben seguir esta convención de nombres:
 | `ci/` | Cambios en el pipeline CI/CD | `ci/agregar-eslint` |
 | `test/` | Agregar o modificar tests | `test/e2e-login` |
 
-**Reglas:**
-- Ningún cambio se mergea directo a `main`. Todo pasa por un Pull Request.
-- El PR debe referenciar el issue que resuelve (ej. `closes #12`).
-- El otro integrante del equipo debe revisar y aprobar el PR antes de mergearlo.
 
-## Scripts disponibles
 
 ```bash
-npm run dev       # Servidor de desarrollo
-npm run build     # Build de producción
-npm run preview   # Preview del build
-npm run lint      # Ejecutar ESLint
-npm run test      # Ejecutar tests con Vitest
+npm run dev       
+npm run build     
+npm run preview   
+npm run lint     
+npm run test      
 ```
-
-## Variables de entorno
-
-Copiar `.env.example` a `.env` y completar con los valores de Supabase:
-
-```
-PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
-PUBLIC_SUPABASE_ANON_KEY=tu-anon-key-de-supabase
-```
-
-## CI/CD
-
-El repositorio cuenta con un pipeline de GitHub Actions que se ejecuta en cada push o PR a `main`:
 
 1. **Lint** — Verifica el código con ESLint
 2. **Tests** — Ejecuta los tests unitarios y E2E
