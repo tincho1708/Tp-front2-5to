@@ -1,0 +1,714 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout titulo="Autos">
+  <Navbar />
+  <main class="con-nav">
+    <section class="cabecera-pagina">
+      <div class="contenedor">
+        <div>
+          <h1 class="titulo-pagina">Mi <span class="titulo-verde">Garage</span></h1>
+          <p class="subtitulo-pagina" id="contador-autos">Cargando...</p>
+        </div>
+        <button class="boton-agregar" id="btn-abrir-modal">+ Agregar auto</button>
+      </div>
+    </section>
+
+    <section class="seccion-filtros">
+      <div class="contenedor">
+        <div class="barra-filtros">
+          <div class="grupo-filtros">
+            <button class="chip activo" data-filtro="todos">Todos</button>
+            <button class="chip" data-filtro="JDM">JDM</button>
+            <button class="chip" data-filtro="Rally">Rally</button>
+            <button class="chip" data-filtro="Europeo">Europeos</button>
+            <button class="chip" data-filtro="Muscle">Muscle</button>
+          </div>
+          <div class="buscador-wrapper">
+            <span class="icono-buscar">⌕</span>
+            <input type="text" class="input-buscar" id="buscador" placeholder="Buscar auto..." />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="seccion-grilla">
+      <div class="contenedor">
+        <div class="grilla-autos" id="grilla-autos"></div>
+        <p class="sin-resultados oculto" id="sin-resultados">No se encontraron autos.</p>
+        <p class="sin-sesion oculto" id="sin-sesion">
+          <a href="/login">Iniciá sesión</a> para ver tu colección.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal agregar/editar -->
+  <div class="overlay-modal oculto" id="overlay-modal">
+    <div class="modal">
+      <div class="modal-cabecera">
+        <h2 class="modal-titulo" id="modal-titulo">Agregar Auto</h2>
+        <button class="modal-cerrar" id="btn-cerrar-modal">✕</button>
+      </div>
+      <div class="modal-cuerpo">
+        <input type="hidden" id="edit-id" />
+        <div class="fila-campos">
+          <div class="campo-form">
+            <label class="etiqueta-campo">Marca</label>
+            <input type="text" class="input-form" id="input-marca" placeholder="ej. Nissan" />
+          </div>
+          <div class="campo-form">
+            <label class="etiqueta-campo">Modelo</label>
+            <input type="text" class="input-form" id="input-modelo" placeholder="ej. Skyline R34" />
+          </div>
+        </div>
+        <div class="fila-campos">
+          <div class="campo-form">
+            <label class="etiqueta-campo">Año</label>
+            <input type="number" class="input-form" id="input-anio" placeholder="1999" />
+          </div>
+          <div class="campo-form">
+            <label class="etiqueta-campo">Estilo</label>
+            <select class="input-form select-form" id="input-estilo">
+              <option value="">Seleccionar</option>
+              <option>JDM</option>
+              <option>Rally</option>
+              <option>Europeo</option>
+              <option>Muscle</option>
+              <option>Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="fila-campos">
+          <div class="campo-form">
+            <label class="etiqueta-campo">Motor</label>
+            <input type="text" class="input-form" id="input-motor" placeholder="ej. RB26DETT" />
+          </div>
+          <div class="campo-form">
+            <label class="etiqueta-campo">Color</label>
+            <input type="color" class="input-form input-color" id="input-color" value="#39ff14" />
+          </div>
+        </div>
+        <div id="error-modal" class="mensaje-error oculto"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancelar" id="btn-cancelar">Cancelar</button>
+        <button class="btn-guardar" id="btn-guardar">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <Footer />
+</Layout>
+
+<style>
+  .cabecera-pagina {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--borde);
+  }
+
+  .cabecera-pagina .contenedor {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .subtitulo-pagina { color: var(--texto-gris); font-size: 0.75rem; margin-top: 0.4rem; letter-spacing: 1px; }
+
+  .boton-agregar {
+    background: var(--verde);
+    color: #050505;
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    padding: 0.6rem 1.4rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .boton-agregar:hover { opacity: 0.85; }
+
+  .seccion-filtros { padding: 1.5rem 0; border-bottom: 1px solid var(--borde); }
+
+  .barra-filtros {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .grupo-filtros { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+  .chip {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--borde);
+    color: var(--texto-gris);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    padding: 0.3rem 0.8rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .chip.activo, .chip:hover {
+    background: rgba(57,255,20,0.1);
+    border-color: rgba(57,255,20,0.3);
+    color: var(--verde);
+  }
+
+  .buscador-wrapper { position: relative; display: flex; align-items: center; }
+
+  .icono-buscar { position: absolute; left: 0.7rem; color: var(--texto-gris); font-size: 1.1rem; pointer-events: none; }
+
+  .input-buscar {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--borde);
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem 0.4rem 2.2rem;
+    border-radius: 3px;
+    width: 220px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-buscar::placeholder { color: #444; }
+  .input-buscar:focus { border-color: rgba(57,255,20,0.3); }
+
+  .seccion-grilla { padding: 2.5rem 0 4rem; }
+
+  .grilla-autos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .card-auto {
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .card-auto:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-3px); }
+
+  .barra-top { height: 3px; }
+
+  .card-contenido { padding: 1.2rem; display: flex; flex-direction: column; gap: 0.9rem; }
+
+  .card-cabecera { display: flex; justify-content: space-between; align-items: center; }
+
+  .badges-auto { display: flex; gap: 0.4rem; align-items: center; }
+
+  .badge-estilo {
+    font-size: 0.6rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #666;
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    padding: 2px 6px;
+  }
+
+  .badge-fav {
+    font-size: 0.6rem;
+    color: var(--rojo);
+    background: rgba(255,68,68,0.1);
+    border: 1px solid rgba(255,68,68,0.2);
+    border-radius: 2px;
+    padding: 2px 5px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .btn-menu-card {
+    background: none;
+    border: none;
+    color: #444;
+    cursor: pointer;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .btn-menu-card:hover { color: #fff; }
+
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #1a1a1a;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    padding: 0.3rem 0;
+    z-index: 10;
+    min-width: 110px;
+    display: none;
+  }
+
+  .dropdown-menu.visible { display: block; }
+
+  .dropdown-item {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.45rem 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .dropdown-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .dropdown-item.eliminar:hover { color: var(--rojo); }
+
+  .card-marca { font-size: 0.65rem; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.2rem; }
+
+  .card-modelo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 1.5px;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .card-specs { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--borde); padding-top: 0.9rem; }
+
+  .spec-fila { display: flex; justify-content: space-between; align-items: center; }
+
+  .spec-key { font-size: 0.65rem; color: #444; letter-spacing: 1px; text-transform: uppercase; }
+  .spec-val { font-size: 0.75rem; color: #aaa; font-family: 'Space Mono', monospace; }
+
+  .muestra-color { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); }
+
+  .card-acciones { display: flex; gap: 0.5rem; }
+
+  .btn-ver {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--borde);
+    color: #aaa;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    padding: 0.35rem 0.8rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-ver:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+  .btn-fav {
+    background: rgba(255,68,68,0.08);
+    border: 1px solid rgba(255,68,68,0.15);
+    color: var(--rojo);
+    font-size: 0.9rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-fav:hover { background: rgba(255,68,68,0.2); }
+
+  .sin-resultados { color: #444; font-size: 0.85rem; text-align: center; padding: 3rem 0; }
+  .sin-sesion { color: #555; font-size: 0.85rem; text-align: center; padding: 3rem 0; }
+  .sin-sesion a { color: var(--verde); text-decoration: none; }
+  .oculto { display: none !important; }
+
+  .overlay-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal {
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 460px;
+    overflow: hidden;
+  }
+
+  .modal-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--borde);
+  }
+
+  .modal-titulo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; }
+
+  .modal-cerrar { background: none; border: none; color: #555; cursor: pointer; transition: color 0.2s; }
+  .modal-cerrar:hover { color: #fff; }
+
+  .modal-cuerpo { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+
+  .fila-campos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .campo-form { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .etiqueta-campo { font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; color: #666; }
+
+  .input-form {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--borde);
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .input-form:focus { border-color: rgba(57,255,20,0.4); }
+  .input-form::placeholder { color: #333; }
+  .select-form { cursor: pointer; }
+  .select-form option { background: #111; }
+  .input-color { padding: 0.25rem; height: 38px; cursor: pointer; }
+
+  .mensaje-error {
+    background: rgba(255,68,68,0.1);
+    border: 1px solid rgba(255,68,68,0.3);
+    color: var(--rojo);
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+  }
+
+  .modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--borde);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.7rem;
+  }
+
+  .btn-cancelar {
+    background: none;
+    border: 1px solid var(--borde);
+    color: #666;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-cancelar:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
+
+  .btn-guardar {
+    background: var(--verde);
+    border: none;
+    color: #050505;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    padding: 0.5rem 1.4rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .btn-guardar:hover { opacity: 0.85; }
+  .btn-guardar:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+
+<script>
+  import { supabase } from '../lib/supabase';
+  import type { Auto } from '../lib/supabase';
+
+  let autosData: Auto[] = [];
+
+  const grilla = document.getElementById('grilla-autos')!;
+  const contador = document.getElementById('contador-autos')!;
+  const sinResultados = document.getElementById('sin-resultados')!;
+  const sinSesion = document.getElementById('sin-sesion')!;
+  const overlay = document.getElementById('overlay-modal')!;
+  const modalTitulo = document.getElementById('modal-titulo')!;
+  const editId = document.getElementById('edit-id') as HTMLInputElement;
+  const inputMarca = document.getElementById('input-marca') as HTMLInputElement;
+  const inputModelo = document.getElementById('input-modelo') as HTMLInputElement;
+  const inputAnio = document.getElementById('input-anio') as HTMLInputElement;
+  const inputEstilo = document.getElementById('input-estilo') as HTMLSelectElement;
+  const inputMotor = document.getElementById('input-motor') as HTMLInputElement;
+  const inputColor = document.getElementById('input-color') as HTMLInputElement;
+  const errorModal = document.getElementById('error-modal')!;
+  const btnGuardar = document.getElementById('btn-guardar') as HTMLButtonElement;
+
+  function crearCardHTML(auto: Auto): string {
+    return `
+      <article class="card-auto" data-estilo="${auto.estilo}" data-nombre="${(auto.marca + ' ' + auto.modelo).toLowerCase()}" data-id="${auto.id}">
+        <div class="barra-top" style="background: ${auto.color}"></div>
+        <div class="card-contenido">
+          <div class="card-cabecera">
+            <div class="badges-auto">
+              <span class="badge-estilo">${auto.estilo || 'Otro'}</span>
+              ${auto.favorito ? '<span class="badge-fav">❤ FAV</span>' : ''}
+            </div>
+            <button class="btn-menu-card" data-id="${auto.id}">
+              ···
+              <div class="dropdown-menu" id="drop-${auto.id}">
+                <button class="dropdown-item editar" data-id="${auto.id}">✏ Editar</button>
+                <button class="dropdown-item eliminar" data-id="${auto.id}">✕ Eliminar</button>
+              </div>
+            </button>
+          </div>
+          <div class="card-nombre">
+            <p class="card-marca">${auto.marca}</p>
+            <h3 class="card-modelo">${auto.modelo}</h3>
+          </div>
+          <div class="card-specs">
+            <div class="spec-fila">
+              <span class="spec-key">Año</span>
+              <span class="spec-val">${auto.anio || '-'}</span>
+            </div>
+            <div class="spec-fila">
+              <span class="spec-key">Motor</span>
+              <span class="spec-val">${auto.motor || '-'}</span>
+            </div>
+            <div class="spec-fila">
+              <span class="spec-key">Color</span>
+              <span class="muestra-color" style="background: ${auto.color}"></span>
+            </div>
+          </div>
+          <div class="card-acciones">
+            <button class="btn-fav" data-id="${auto.id}" data-fav="${auto.favorito}">${auto.favorito ? '❤' : '♡'}</button>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function renderCards(autos: Auto[]) {
+    grilla.innerHTML = autos.map(crearCardHTML).join('');
+    contador.textContent = `${autos.length} auto${autos.length !== 1 ? 's' : ''} registrado${autos.length !== 1 ? 's' : ''}`;
+    adjuntarEventosCards();
+  }
+
+  function adjuntarEventosCards() {
+    document.querySelectorAll('.btn-menu-card').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.id!;
+        const drop = document.getElementById(`drop-${id}`);
+        document.querySelectorAll('.dropdown-menu.visible').forEach(d => {
+          if (d !== drop) d.classList.remove('visible');
+        });
+        drop?.classList.toggle('visible');
+      });
+    });
+
+    document.querySelectorAll('.dropdown-item.editar').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.id!;
+        const auto = autosData.find(a => a.id === id);
+        if (!auto) return;
+        abrirModalEditar(auto);
+      });
+    });
+
+    document.querySelectorAll('.dropdown-item.eliminar').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const id = (btn as HTMLElement).dataset.id!;
+        if (!confirm('¿Eliminar este auto?')) return;
+        await supabase.from('autos').delete().eq('id', id);
+        autosData = autosData.filter(a => a.id !== id);
+        renderCards(autosData);
+        filtrar();
+      });
+    });
+
+    document.querySelectorAll('.btn-fav').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = (btn as HTMLElement).dataset.id!;
+        const esFav = (btn as HTMLElement).dataset.fav === 'true';
+        await supabase.from('autos').update({ favorito: !esFav }).eq('id', id);
+        const auto = autosData.find(a => a.id === id);
+        if (auto) auto.favorito = !esFav;
+        renderCards(autosData);
+        filtrar();
+      });
+    });
+  }
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown-menu.visible').forEach(d => d.classList.remove('visible'));
+  });
+
+  function abrirModalAgregar() {
+    editId.value = '';
+    modalTitulo.textContent = 'Agregar Auto';
+    inputMarca.value = '';
+    inputModelo.value = '';
+    inputAnio.value = '';
+    inputEstilo.value = '';
+    inputMotor.value = '';
+    inputColor.value = '#39ff14';
+    errorModal.classList.add('oculto');
+    overlay.classList.remove('oculto');
+  }
+
+  function abrirModalEditar(auto: Auto) {
+    editId.value = auto.id;
+    modalTitulo.textContent = 'Editar Auto';
+    inputMarca.value = auto.marca;
+    inputModelo.value = auto.modelo;
+    inputAnio.value = String(auto.anio || '');
+    inputEstilo.value = auto.estilo || '';
+    inputMotor.value = auto.motor || '';
+    inputColor.value = auto.color || '#39ff14';
+    errorModal.classList.add('oculto');
+    overlay.classList.remove('oculto');
+  }
+
+  function cerrarModal() { overlay.classList.add('oculto'); }
+
+  document.getElementById('btn-abrir-modal')?.addEventListener('click', abrirModalAgregar);
+  document.getElementById('btn-cerrar-modal')?.addEventListener('click', cerrarModal);
+  document.getElementById('btn-cancelar')?.addEventListener('click', cerrarModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) cerrarModal(); });
+
+  btnGuardar.addEventListener('click', async () => {
+    const marca = inputMarca.value.trim();
+    const modelo = inputModelo.value.trim();
+
+    if (!marca || !modelo) {
+      errorModal.textContent = 'Marca y modelo son obligatorios.';
+      errorModal.classList.remove('oculto');
+      return;
+    }
+
+    btnGuardar.disabled = true;
+    btnGuardar.textContent = 'Guardando...';
+    errorModal.classList.add('oculto');
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      errorModal.textContent = 'Debés iniciar sesión para guardar.';
+      errorModal.classList.remove('oculto');
+      btnGuardar.disabled = false;
+      btnGuardar.textContent = 'Guardar';
+      return;
+    }
+
+    const datos = {
+      marca,
+      modelo,
+      anio: inputAnio.value ? parseInt(inputAnio.value) : null,
+      estilo: inputEstilo.value || null,
+      motor: inputMotor.value.trim() || null,
+      color: inputColor.value,
+    };
+
+    const id = editId.value;
+
+    if (id) {
+      const { error } = await supabase.from('autos').update(datos).eq('id', id);
+      if (error) {
+        errorModal.textContent = 'Error al actualizar. Intentá de nuevo.';
+        errorModal.classList.remove('oculto');
+      } else {
+        const idx = autosData.findIndex(a => a.id === id);
+        if (idx !== -1) autosData[idx] = { ...autosData[idx], ...datos };
+        cerrarModal();
+        renderCards(autosData);
+        filtrar();
+      }
+    } else {
+      const { data, error } = await supabase.from('autos').insert({ ...datos, user_id: user.id }).select().single();
+      if (error) {
+        errorModal.textContent = 'Error al guardar. Intentá de nuevo.';
+        errorModal.classList.remove('oculto');
+      } else {
+        autosData.unshift(data as Auto);
+        cerrarModal();
+        renderCards(autosData);
+        filtrar();
+      }
+    }
+
+    btnGuardar.disabled = false;
+    btnGuardar.textContent = 'Guardar';
+  });
+
+  function filtrar() {
+    const filtroActivo = document.querySelector('.chip.activo')?.getAttribute('data-filtro') || 'todos';
+    const busqueda = (document.getElementById('buscador') as HTMLInputElement)?.value.toLowerCase() || '';
+    const cards = document.querySelectorAll('.card-auto');
+    let visibles = 0;
+    cards.forEach(card => {
+      const estilo = card.getAttribute('data-estilo') || '';
+      const nombre = card.getAttribute('data-nombre') || '';
+      const ok = (filtroActivo === 'todos' || estilo === filtroActivo) && nombre.includes(busqueda);
+      (card as HTMLElement).style.display = ok ? '' : 'none';
+      if (ok) visibles++;
+    });
+    sinResultados.classList.toggle('oculto', visibles > 0 || autosData.length === 0);
+  }
+
+  document.querySelectorAll('.chip[data-filtro]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip[data-filtro]').forEach(c => c.classList.remove('activo'));
+      chip.classList.add('activo');
+      filtrar();
+    });
+  });
+
+  document.getElementById('buscador')?.addEventListener('input', filtrar);
+
+  async function cargarAutos() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      sinSesion.classList.remove('oculto');
+      contador.textContent = 'Sin sesión';
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('autos')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error || !data) {
+      contador.textContent = 'Error al cargar autos';
+      return;
+    }
+
+    autosData = data as Auto[];
+    renderCards(autosData);
+    filtrar();
+  }
+
+  cargarAutos();
+</script>

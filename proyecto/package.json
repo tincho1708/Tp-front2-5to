@@ -9,11 +9,21 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "lint": "eslint src/",
+    "test": "vitest run",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/vercel": "^10.0.8",
     "@supabase/supabase-js": "^2.106.2",
     "astro": "^6.1.9"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.62.0",
+    "@typescript-eslint/parser": "^8.62.0",
+    "eslint": "^10.5.0",
+    "eslint-plugin-astro": "^1.7.0",
+    "typescript": "^5.9.3"
   }
 }

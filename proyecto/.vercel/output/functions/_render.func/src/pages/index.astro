@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import SeccionColeccion from '../components/SeleccionColeccion.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout titulo="Inicio" descripcion="GridVault - Coleccioná tus autos favoritos">
+  <Navbar />
+  <main class="con-nav">
+    <Hero />
+    <SeccionColeccion />
+  </main>
+  <Footer />
+</Layout>

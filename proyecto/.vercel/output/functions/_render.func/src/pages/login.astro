@@ -1,0 +1,260 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+---
+
+<Layout titulo="Iniciar sesión">
+  <Navbar />
+  <main class="pagina-auth con-nav">
+    <div class="contenedor-auth">
+      <div class="card-auth">
+        <div class="auth-cabecera">
+          <a href="/" class="logo-auth">⚡ GRID<span class="verde">VAULT</span></a>
+          <h1 class="titulo-auth">Bienvenido de vuelta</h1>
+          <p class="subtitulo-auth">Ingresá a tu colección</p>
+        </div>
+
+        <div id="error-msg" class="mensaje-error oculto"></div>
+
+        <div class="formulario-auth">
+          <div class="campo-form">
+            <label class="etiqueta-campo">Email</label>
+            <input type="email" class="input-form" placeholder="vos@ejemplo.com" id="campo-email" />
+          </div>
+          <div class="campo-form">
+            <label class="etiqueta-campo">Contraseña</label>
+            <div class="input-password-wrapper">
+              <input type="password" class="input-form" placeholder="••••••••" id="campo-pass" />
+              <button class="btn-toggle-pass" id="btn-ver-pass" type="button">👁</button>
+            </div>
+          </div>
+
+          <div class="fila-opciones">
+            <label class="checkbox-wrapper">
+              <input type="checkbox" class="checkbox-real" />
+              <span class="checkbox-custom"></span>
+              <span class="checkbox-label">Recordarme</span>
+            </label>
+            <a href="#" class="link-olvidaste">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button class="boton-submit" id="btn-login">Iniciar sesión</button>
+        </div>
+
+        <p class="link-alternativo">
+          ¿No tenés cuenta? <a href="/registro">Registrate gratis</a>
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .pagina-auth {
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .contenedor-auth { width: 100%; max-width: 420px; }
+
+  .card-auth {
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 2.5rem;
+  }
+
+  .auth-cabecera { text-align: center; margin-bottom: 2rem; }
+
+  .logo-auth {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    color: #fff;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .verde { color: var(--verde); }
+
+  .titulo-auth {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 1.5px;
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+
+  .subtitulo-auth { font-size: 0.8rem; color: var(--texto-gris); letter-spacing: 0.5px; }
+
+  .mensaje-error {
+    background: rgba(255,68,68,0.1);
+    border: 1px solid rgba(255,68,68,0.3);
+    color: var(--rojo);
+    font-size: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+  }
+
+  .formulario-auth { display: flex; flex-direction: column; gap: 1rem; }
+
+  .campo-form { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .etiqueta-campo {
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #666;
+  }
+
+  .input-form {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--borde);
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .input-form:focus { border-color: rgba(57,255,20,0.4); }
+  .input-form::placeholder { color: #333; }
+
+  .input-password-wrapper { position: relative; }
+  .input-password-wrapper .input-form { padding-right: 2.5rem; }
+
+  .btn-toggle-pass {
+    position: absolute;
+    right: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+
+  .btn-toggle-pass:hover { opacity: 1; }
+
+  .fila-opciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .checkbox-wrapper { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+  .checkbox-real { display: none; }
+
+  .checkbox-custom {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #444;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  .checkbox-real:checked + .checkbox-custom { background: var(--verde); border-color: var(--verde); }
+  .checkbox-real:checked + .checkbox-custom::after { content: '✓'; font-size: 0.65rem; color: #050505; font-weight: bold; }
+  .checkbox-label { font-size: 0.7rem; color: #666; }
+
+  .link-olvidaste {
+    font-size: 0.7rem;
+    color: var(--texto-gris);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .link-olvidaste:hover { opacity: 1; }
+
+  .boton-submit {
+    background: var(--verde);
+    border: none;
+    color: #050505;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    padding: 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.2s;
+    margin-top: 0.25rem;
+  }
+
+  .boton-submit:hover { opacity: 0.85; }
+  .boton-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .link-alternativo { text-align: center; font-size: 0.75rem; color: #555; margin-top: 1.5rem; }
+
+  .link-alternativo a {
+    color: var(--verde);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+  .link-alternativo a:hover { opacity: 1; }
+  .oculto { display: none !important; }
+</style>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  const btnVerPass = document.getElementById('btn-ver-pass');
+  const campoPass = document.getElementById('campo-pass') as HTMLInputElement;
+  const campoEmail = document.getElementById('campo-email') as HTMLInputElement;
+  const btnLogin = document.getElementById('btn-login') as HTMLButtonElement;
+  const errorMsg = document.getElementById('error-msg')!;
+
+  btnVerPass?.addEventListener('click', () => {
+    if (campoPass.type === 'password') {
+      campoPass.type = 'text';
+      btnVerPass.textContent = '🙈';
+    } else {
+      campoPass.type = 'password';
+      btnVerPass.textContent = '👁';
+    }
+  });
+
+  btnLogin?.addEventListener('click', async () => {
+    const email = campoEmail.value.trim();
+    const password = campoPass.value;
+
+    if (!email || !password) {
+      errorMsg.textContent = 'Completá todos los campos.';
+      errorMsg.classList.remove('oculto');
+      return;
+    }
+
+    btnLogin.disabled = true;
+    btnLogin.textContent = 'Ingresando...';
+    errorMsg.classList.add('oculto');
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      errorMsg.textContent = 'Email o contraseña incorrectos.';
+      errorMsg.classList.remove('oculto');
+      btnLogin.disabled = false;
+      btnLogin.textContent = 'Iniciar sesión';
+    } else {
+      window.location.href = '/coleccion';
+    }
+  });
+</script>
