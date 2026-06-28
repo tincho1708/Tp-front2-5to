@@ -1,4 +1,3 @@
-<img width="1764" height="380" alt="image" src="https://github.com/user-attachments/assets/bee0aa91-5805-470a-9a91-58fdedacd4c9" />GridVault es una app web para armar tu propia colección de autos de carrera y tuneados (JDM, Rally, Muscle, Europeos). La hicimos como Trabajo Práctico para tpfront-2. Te podés registrar, iniciar sesión y manejar tu colección con estadísticas, favoritos y un perfil editable.
 
 
 https://tp-front2-5to-3omu.vercel.app/
