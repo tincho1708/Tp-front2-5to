@@ -10,8 +10,8 @@ Además del pipeline, implementamos un flujo de trabajo basado en Pull Requests 
 
 ## Herramientas seleccionadas
 
-<!-- COMPLETAR POR PERSONA 2: justificar la elección de Vitest, Playwright, y alternativas evaluadas -->
-
+**Vitest**: Es necesario para poder realizar los test. La elegimos porque es de las más usadas y más eficientes.
+**Happy Dom**:Es necesario para poder realizar los test debido a que usamos astro. Simula todo en un entorno de node.
 ## Tests desarrollados
 
 
