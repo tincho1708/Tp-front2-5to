@@ -40,4 +40,3 @@ describe("Auto type", () => {
     expect(auto.motor).toBeNull();
   });
 });
-Crealo ahí y después corré npm run test desde la carpeta proyecto/.

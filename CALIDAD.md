@@ -13,9 +13,13 @@ Además del pipeline, implementamos un flujo de trabajo basado en Pull Requests 
 **Vitest**: Es necesario para poder realizar los test. La elegimos porque es de las más usadas y más eficientes.
 **Happy Dom**:Es necesario para poder realizar los test debido a que usamos astro. Simula todo en un entorno de node.
 ## Tests desarrollados
+Los test desarrollados fueron confirmar que la página: 
+    debería crear un auto válido con todos los campos 
+    debería permitir anio, estilo y motor como null 
+Ambos funcionaron.
 
-
-Casos de uso críticos
+## Casos de uso críticos
+Las supabase Key son publicas lo que es peligroso debido a que permiten el acceso a la base de datos. Se podría privatizar la base de datos para evitar esto.
 
 
 Pipeline de CI/CD
