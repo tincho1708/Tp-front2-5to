@@ -1,4 +1,3 @@
-GridVault es una app web para armar tu propia colección de autos de carrera y tuneados (JDM, Rally, Muscle, Europeos). La hicimos como Trabajo Práctico para tpfront-2. Te podés registrar, iniciar sesión y manejar tu colección con estadísticas, favoritos y un perfil editable.
 
 
 https://tp-front2-5to-3omu.vercel.app/
@@ -29,7 +28,7 @@ npm run dev
 npm run build     
 npm run preview   
 npm run lint     
-npm run test      
+npm run test (antes esto npm install -D vitest happy-dom)     
 
 
 1. Lint Verifica el código con ESLint
